@@ -1,0 +1,126 @@
+﻿<common:LayoutAwarePage
+    x:Name="pageRoot"
+    x:Class="CareWin8.AccountView"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CareWin8"
+    xmlns:common="using:CareWin8.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mycontrol="using:CareWin8.MyControl"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+
+        <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
+        <x:String x:Key="AppName">My Application</x:String>
+    </Page.Resources>
+
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <Grid Style="{StaticResource LayoutRootStyle}">
+        <Grid.Background>
+            <ImageBrush ImageSource="../../Images/Background/Day.PNG" />
+        </Grid.Background>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <mycontrol:SinaWeiboLoginPopup x:Name ="sinaWeiboLoginPopup"/>
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="帐号绑定" Style="{StaticResource PageHeaderTextStyle}"/>
+        </Grid>
+        <Grid Grid.Row="1" >
+            <ScrollViewer Padding="100,0,0,0"  FlowDirection="LeftToRight" VerticalScrollMode="Disabled">
+                <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
+                    <Grid  Width="335" Height="450" VerticalAlignment="Top">
+                        <Image Source="../../Images/Background/Item.png"></Image>
+                        <StackPanel>
+                            <TextBlock Text="新浪微博" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="10"  >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image> 
+                                        <Image Source="{Binding SinaWeiboAvatar}" Width="65" Height="65"></Image>
+                                    </Grid>                                    
+                                </Border>
+                                <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock Text="当前登陆用户:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding SinaWeiboName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="15"  >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image>
+                                        <Image Source="{Binding SinaWeiboFollowerAvatar}" Width="65" Height="65"></Image>
+                                    </Grid>
+                                </Border>
+                                <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock Text="当前关注帐号:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock Text="{Binding SinaWeiboFollowerName}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>    
+                        </StackPanel>
+                        <StackPanel Margin="20,0,20,30"  VerticalAlignment="Bottom">
+                            <Button  Content="登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogin_Click"  />
+                            <Button  Content="指定关注人" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboSelectFriend_Click"  />
+                            <Button  Content="退出当前登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogout_Click"/>
+                        </StackPanel>                       
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        
+        
+        <VisualStateManager.VisualStateGroups>
+            <!-- Visual states reflect the application's view state -->
+            <VisualStateGroup x:Name="ApplicationViewStates">
+                <VisualState x:Name="FullScreenLandscape"/>
+                <VisualState x:Name="Filled"/>
+
+                <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
+                <VisualState x:Name="FullScreenPortrait">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <!-- The back button and title have different styles when snapped -->
+                <VisualState x:Name="Snapped">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+    </Grid>
+</common:LayoutAwarePage>
