@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Windows;
 using System.Collections.ObjectModel;
-
+using System.Xml.Serialization;
 
 namespace CareWin8
 {
@@ -12,9 +12,11 @@ namespace CareWin8
     {
         NotSet,
         SinaWeibo,
-        Feed,
+        Rss,
         Renren,
         Douban,
+        ShowMore,
+        Nothing
     };
 
     public class ItemViewModel : INotifyPropertyChanged
@@ -171,7 +173,25 @@ namespace CareWin8
                 }
             }
         }
-        
+
+        [XmlElement("TimeObject")]
+        public string TimeObjectForXML
+        {
+            get { return TimeObject.ToString(); }
+            set 
+            { 
+                try
+                {
+                    TimeObject = DateTimeOffset.Parse(value); 
+                }
+                catch (System.Exception ex)
+                {
+                    TimeObject = new DateTimeOffset();
+                }                
+            }
+        }
+
+        [XmlIgnore] 
         public DateTimeOffset TimeObject
         {
             get
@@ -205,7 +225,7 @@ namespace CareWin8
                     case EntryType.SinaWeibo:
                         fromPart = "   来自新浪微博";
                         break;
-                    case EntryType.Feed:
+                    case EntryType.Rss:
                         fromPart = "   来自RSS订阅";
                         break;
                 }
@@ -371,18 +391,18 @@ namespace CareWin8
                 if (ForwardItem!= null && Content != null)
                 {                    
                     if(length > 13)
-                    return Content.Substring(0, 13);
+                        return Content.Substring(0, 13).Replace('\r', ' ').Replace('\n', ' ');
                 }
                 if (_imageURL != null)
                 {
-                    if (length > 60) 
-                        return Content.Substring(0, 60) + "...";
+                    if (length > 60)
+                        return Content.Substring(0, 60).Replace('\r', ' ').Replace('\n', ' ') + "...";
                 }
                 if (length > 95)
                 {
-                    return Content.Substring(0, 90) + "...";
+                    return Content.Substring(0, 90).Replace('\r', ' ').Replace('\n', ' ') + "...";
                 }
-                return Content;
+                return Content.Replace('\r',' ').Replace('\n',' ');
             }
         }
         public String ContentWithSpeaker

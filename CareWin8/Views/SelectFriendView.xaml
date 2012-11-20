@@ -44,7 +44,7 @@
                       SelectionMode="Single" SelectionChanged="FriendsGridView_SelectionChanged">
                 <GridView.ItemTemplate>
                     <DataTemplate>                      
-                        <Border Padding="0,0,0,5"  Width="270" Height="150"  Background="White" Opacity="0.9" BorderBrush="Gray" BorderThickness="2">
+                        <Border Padding="0,0,0,5"  Width="270" Height="150"  Background="White" Opacity="0.9" BorderThickness="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60" />

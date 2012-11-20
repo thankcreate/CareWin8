@@ -22,7 +22,8 @@ namespace CareWin8
     public sealed partial class StatusDetailView : CareWin8.Common.LayoutAwarePage
     {
         ItemViewModel m_itemViewModel;
-        
+        ProgressBarHelper m_progressBarHelper;
+
         public StatusDetailView()
         {
             this.InitializeComponent();
@@ -56,6 +57,12 @@ namespace CareWin8
         {
             if (m_itemViewModel == null)
                 return;
+
+            if (m_progressBarHelper == null)
+            {
+                m_progressBarHelper = new ProgressBarHelper(CommentProgessBar, () => { });
+            }
+            m_progressBarHelper.PushTask();
             EntryType type = m_itemViewModel.Type;
             if (type == EntryType.SinaWeibo)
             {
@@ -77,17 +84,24 @@ namespace CareWin8
             try
             {
                 collection = this.DefaultViewModel["CommentItems"] as ObservableCollection<CommentViewModel>;
+                collection.Clear();
             }
             catch (System.Exception ex)
             {
+                m_progressBarHelper.PopTask();
                 return;
             }
             if (collection == null)
+            {
+                m_progressBarHelper.PopTask();
                 return;
+            }
+                
 
             SinaWeiboSDK.GetStatusCommentsResponse response = await App.SinaWeiboAPI.CommentAPI.GetStatusComments(m_itemViewModel.ID, 50);
             if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.comments != null)
             {
+                
                 foreach (SinaWeiboSDK.Comment rawComment in response.comments)
                 {
                     CommentViewModel model = SinaWeiboConverter.ConvertCommentToCommon(rawComment);
@@ -97,6 +111,7 @@ namespace CareWin8
                     }
                 }
             }
+            m_progressBarHelper.PopTask();
         }
         private void RefreshCommentsForRenren()
         {
@@ -128,6 +143,16 @@ namespace CareWin8
         /// <param name="pageState">要使用可序列化状态填充的空字典。</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
+        }
+
+        private void RefreshComment_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            RefreshComments();
+        }
+
+        private void AddComment_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(AddCommentView), m_itemViewModel);
         }
     }
 }

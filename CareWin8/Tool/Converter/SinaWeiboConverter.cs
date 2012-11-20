@@ -38,44 +38,52 @@ namespace CareWin8
 
         public static ItemViewModel ConvertItemToCommon(Status status)
         {
-            // TODO
-            FiltPicture(status);
-            ItemViewModel model = new ItemViewModel();
-            model.IconURL = status.user.profile_image_url;
-            model.LargeIconURL = status.user.avatar_large;
-            model.Title = status.user.name;
-            model.Content = status.text;
-            model.ImageURL = MiscTool.MakeFriendlyImageURL(status.thumbnail_pic);
-            model.MidImageURL = MiscTool.MakeFriendlyImageURL(status.bmiddle_pic);
-            model.FullImageURL = MiscTool.MakeFriendlyImageURL(status.original_pic);
-            model.TimeObject = status.CreatedAt;
-            model.Type = EntryType.SinaWeibo;
-            model.ID = status.id;
-            model.SharedCount = status.reposts_count.ToString();
-            model.CommentCount = status.comments_count.ToString();
-            model.Comments = new ObservableCollection<CommentViewModel>();
-
-
-            if (status.IsRetweetedStatus == "Visible")
+            try
             {
-                model.ForwardItem = new ItemViewModel();
-                if (status.retweeted_status.user != null)
+                // TODO
+                FiltPicture(status);
+                ItemViewModel model = new ItemViewModel();
+                model.IconURL = status.user.profile_image_url;
+                model.LargeIconURL = status.user.avatar_large;
+                model.Title = status.user.name;
+                model.Content = status.text;
+                model.ImageURL = MiscTool.MakeFriendlyImageURL(status.thumbnail_pic);
+                model.MidImageURL = MiscTool.MakeFriendlyImageURL(status.bmiddle_pic);
+                model.FullImageURL = MiscTool.MakeFriendlyImageURL(status.original_pic);
+                model.TimeObject = status.CreatedAt;
+                model.Type = EntryType.SinaWeibo;
+                model.ID = status.id;
+                model.SharedCount = status.reposts_count.ToString();
+                model.CommentCount = status.comments_count.ToString();
+                model.Comments = new ObservableCollection<CommentViewModel>();
+
+
+                if (status.IsRetweetedStatus == "Visible")
                 {
-                    model.ForwardItem.Title = status.retweeted_status.user.name;
+                    model.ForwardItem = new ItemViewModel();
+                    if (status.retweeted_status.user != null)
+                    {
+                        model.ForwardItem.Title = status.retweeted_status.user.name;
+                    }
+                    model.ForwardItem.Content = status.retweeted_status.text;
+                    model.ForwardItem.ImageURL = MiscTool.MakeFriendlyImageURL(status.retweeted_status.thumbnail_pic);
+                    model.ForwardItem.MidImageURL = MiscTool.MakeFriendlyImageURL(status.retweeted_status.bmiddle_pic);
+                    model.ForwardItem.FullImageURL = MiscTool.MakeFriendlyImageURL(status.retweeted_status.original_pic);
+                    model.ForwardItem.TimeObject = status.retweeted_status.CreatedAt;
+                    model.ForwardItem.Type = EntryType.SinaWeibo;
+                    model.ForwardItem.SharedCount = status.retweeted_status.reposts_count.ToString();
+                    model.ForwardItem.CommentCount = status.retweeted_status.comments_count.ToString();
+                    model.ForwardItem.ID = status.id;
+                    model.ForwardItem.IconURL = status.retweeted_status.user.profile_image_url;
+                    model.ForwardItem.LargeIconURL = status.retweeted_status.user.avatar_large;
                 }
-                model.ForwardItem.Content = status.retweeted_status.text;
-                model.ForwardItem.ImageURL = MiscTool.MakeFriendlyImageURL(status.retweeted_status.thumbnail_pic);
-                model.ForwardItem.MidImageURL = MiscTool.MakeFriendlyImageURL(status.retweeted_status.bmiddle_pic);
-                model.ForwardItem.FullImageURL = MiscTool.MakeFriendlyImageURL(status.retweeted_status.original_pic);
-                model.ForwardItem.TimeObject = status.retweeted_status.CreatedAt;
-                model.ForwardItem.Type = EntryType.SinaWeibo;
-                model.ForwardItem.SharedCount = status.retweeted_status.reposts_count.ToString();
-                model.ForwardItem.CommentCount = status.retweeted_status.comments_count.ToString();
-                model.ForwardItem.ID = status.id;
-                model.ForwardItem.IconURL = status.retweeted_status.user.profile_image_url;
-                model.ForwardItem.LargeIconURL = status.retweeted_status.user.avatar_large;
+                return model;
             }
-            return model;
+            catch (System.Exception ex)
+            {
+                return null;	
+            }
+           
         }
 
         public static void FiltPicture(Status status)
@@ -88,7 +96,7 @@ namespace CareWin8
             {
                 return;
             }
-            PictureItem picItem = new PictureItem();
+            PictureItemViewModel picItem = new PictureItemViewModel();
             picItem.Url = MiscTool.MakeFriendlyImageURL(status.bmiddle_pic);
             picItem.FullUrl = MiscTool.MakeFriendlyImageURL(status.original_pic);
             picItem.Id = status.id;

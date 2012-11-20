@@ -2,7 +2,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CareWin8"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mycontrol="using:CareWin8.MyControl">
+
+    
 
     <Style TargetType="mycontrol:HubTile">
         <Style.Setters>
@@ -215,4 +218,6 @@
             </Setter>
         </Style.Setters>
     </Style>
+
+    
 </ResourceDictionary>

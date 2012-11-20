@@ -1,0 +1,127 @@
+﻿<common:LayoutAwarePage
+    x:Name="pageRoot"
+    x:Class="CareWin8.PotentialEnemyView"
+    DataContext="{Binding  RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CareWin8"
+    xmlns:common="using:CareWin8.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+
+        <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
+        <x:String x:Key="AppName">My Application</x:String>
+    </Page.Resources>
+
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <Grid Style="{StaticResource LayoutRootStyle}">
+        <Grid.Background>
+            <ImageBrush ImageSource="../../Images/Background/Day.PNG" />
+        </Grid.Background>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：潜在情敌" Style="{StaticResource PageHeaderTextStyle}"/>
+        </Grid>
+        
+        <Grid Grid.Row="1" Margin="120,20,0,6" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid  Width="600" Height="500"  Grid.Column="0">
+                <ProgressBar x:Name="LoadProgessBar" ShowPaused="True"  Background="Transparent" IsIndeterminate="True" Value="0" />
+                <Grid   x:Name="ControlPanel" >
+                </Grid>
+            </Grid>
+            <Grid  Grid.Column="1" VerticalAlignment="Bottom" Margin="20,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid  >
+                    <Grid.ColumnDefinitions>                        
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>                    
+                    <Border Margin="0,0,0,0"  Background="Green" Width="60" Height="60" CornerRadius="3" >
+                        <Grid>
+                            <Image  Source="/Images/Thumb/DefaultAvatar.png"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            <Image  Source="{Binding AvatarSource}"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                        </Grid>
+                    </Border>
+                    <TextBlock  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Name}" Margin="10,0,0,0"  TextWrapping="Wrap"  FontSize="35"  Foreground="Green" VerticalAlignment="Bottom"/>
+                </Grid>
+                <StackPanel Grid.Row="1"  Orientation="Horizontal">
+                    <StackPanel>
+                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left"  Orientation="Horizontal">
+                            <TextBlock FontSize="25"  Foreground="Green"  Text="头号情敌 :"  />
+                            <TextBlock FontSize="25" Text="{Binding Name1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left"  Orientation="Horizontal">
+                            <TextBlock FontSize="25"  Foreground="Green"  Text="不可小觑 :"  />
+                            <TextBlock FontSize="25" Text="{Binding Name2}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left"  Orientation="Horizontal">
+                            <TextBlock FontSize="25"  Foreground="Green"  Text="值得留意 :"  />
+                            <TextBlock FontSize="25" Text="{Binding Name3}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="100,0,0,0" VerticalAlignment="Bottom" Orientation="Horizontal" Tapped="Share_Tapped">
+                        <Image   Width="35" Height="35"  Source="/Images/Thumb/Share.png" VerticalAlignment="Bottom"></Image>
+                        <TextBlock Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+
+
+            </Grid>
+        </Grid>
+        
+        <VisualStateManager.VisualStateGroups>
+
+            <!-- Visual states reflect the application's view state -->
+            <VisualStateGroup x:Name="ApplicationViewStates">
+                <VisualState x:Name="FullScreenLandscape"/>
+                <VisualState x:Name="Filled"/>
+
+                <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
+                <VisualState x:Name="FullScreenPortrait">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <!-- The back button and title have different styles when snapped -->
+                <VisualState x:Name="Snapped">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</common:LayoutAwarePage>

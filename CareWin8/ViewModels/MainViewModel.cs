@@ -13,18 +13,18 @@ namespace CareWin8
         public MainViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
+            this.TopItems = new ObservableCollection<ItemViewModel>();
             this.ListItems = new List<ItemViewModel>();
             this.SinaWeiboItems = new List<ItemViewModel>();
             this.RssItems = new List<ItemViewModel>();
             this.RenrenItems = new List<ItemViewModel>();
             this.DoubanItems = new List<ItemViewModel>();
 
-            this.PictureItems = new ObservableCollection<PictureItem>();
-            this.PictureItems2 = new ObservableCollection<PictureItem>();
-            this.ListPictureItems = new List<PictureItem>();
-            this.SinaWeiboPicItems = new List<PictureItem>();
-            this.RenrenPicItems = new List<PictureItem>();
-            this.RssPicItems = new List<PictureItem>();          
+            this.PictureItems = new ObservableCollection<PictureItemViewModel>();            
+            this.ListPictureItems = new List<PictureItemViewModel>();
+            this.SinaWeiboPicItems = new List<PictureItemViewModel>();
+            this.RenrenPicItems = new List<PictureItemViewModel>();
+            this.RssPicItems = new List<PictureItemViewModel>();          
 
             this.ItemsNeedRefresh = 2;            
             this.IsChanged = true;
@@ -32,7 +32,8 @@ namespace CareWin8
 
 
         // Main items
-        public ObservableCollection<ItemViewModel> Items { get; private set; }
+        public ObservableCollection<ItemViewModel> Items { get;  set; }  //所有的源集成到一起的全集
+        public ObservableCollection<ItemViewModel> TopItems { get;  set; }  //Items的前N项，用于在主页显示
         public List<ItemViewModel> ListItems { get; private set; }
         public List<ItemViewModel> SinaWeiboItems { get; private set; }
         public List<ItemViewModel> RssItems { get; private set; }
@@ -43,14 +44,16 @@ namespace CareWin8
 
         public bool IsChanged;
 
-        public ObservableCollection<PictureItem> PictureItems2 { get; private set; }
+        
     
         // Pic items
-        public ObservableCollection<PictureItem> PictureItems { get; private set; }
-        public List<PictureItem> ListPictureItems { get; private set; }
-        public List<PictureItem> SinaWeiboPicItems { get; private set; }
-        public List<PictureItem> RenrenPicItems { get; private set; }
-        public List<PictureItem> RssPicItems { get; private set; }
+        public ObservableCollection<PictureItemViewModel> PictureItems { get; private set; }
+        public List<PictureItemViewModel> ListPictureItems { get; private set; }
+        public List<PictureItemViewModel> SinaWeiboPicItems { get; private set; }
+        public List<PictureItemViewModel> RenrenPicItems { get; private set; }
+        public List<PictureItemViewModel> RssPicItems { get; private set; }
+
+       
 
         // Setting
         public String UsingPassword

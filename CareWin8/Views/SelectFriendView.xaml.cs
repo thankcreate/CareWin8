@@ -32,9 +32,7 @@ namespace CareWin8
 
         public SelectFriendView()
         {
-            FriendListInShow = new ObservableCollection<FriendViewModel>();
-            FriendListInShow.Add(new FriendViewModel { Name = "123" });
-            FriendListInShow.Add(new FriendViewModel { Name = "345" });
+            FriendListInShow = new ObservableCollection<FriendViewModel>();           
             AllFriendList = new List<FriendViewModel>();
             
             this.InitializeComponent();
@@ -89,7 +87,7 @@ namespace CareWin8
             foreach (FriendViewModel model in AllFriendList)
             {
                 FriendListInShow.Add(model);
-            }            
+            }
         }
 
         /// <summary>
@@ -154,7 +152,9 @@ namespace CareWin8
             {
                 FriendViewModel friend = FriendListInShow[index];
                 String oldFollowerID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
-                if (!String.IsNullOrEmpty(oldFollowerID) && oldFollowerID != friend.ID)
+                if (!String.IsNullOrEmpty(oldFollowerID) && oldFollowerID == friend.ID)
+                    App.MainViewModel.IsChanged = false;
+                else
                     App.MainViewModel.IsChanged = true;
                 PreferenceHelper.SetPreference("SinaWeibo_FollowerID", friend.ID);
                 PreferenceHelper.SetPreference("SinaWeibo_FollowerNickName", friend.Name);
@@ -176,7 +176,7 @@ namespace CareWin8
             {
                 FriendViewModel friend = FriendListInShow[index];
                 String oldFollowerID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
-                if (!String.IsNullOrEmpty(oldFollowerID) && oldFollowerID != friend.ID)
+                if (String.IsNullOrEmpty(oldFollowerID) || oldFollowerID != friend.ID)
                     App.MainViewModel.IsChanged = true;
                 PreferenceHelper.SetPreference("SinaWeibo_FollowerID", friend.ID);
                 PreferenceHelper.SetPreference("SinaWeibo_FollowerNickName", friend.Name);

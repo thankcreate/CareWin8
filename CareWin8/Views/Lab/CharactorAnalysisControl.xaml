@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="CareWin8.CharactorAnalysisControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CareWin8"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:vc="using:Visifire.Charts" 
+    xmlns:vg="using:Visifire.Gauges"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    mc:Ignorable="d"
+    d:DesignHeight="500"
+    d:DesignWidth="600">
+    
+    <Grid>
+        <vc:Chart   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   x:Name="ChartLicensesSold" View3D="False" CornerRadius="2">
+            <vc:Chart.Titles>
+                <vc:Title Text=""/>
+            </vc:Chart.Titles>
+
+            <vc:Chart.AxesX>
+                <vc:Axis LineThickness="0">
+                    <vc:Axis.AxisLabels>
+                        <vc:AxisLabels TextAlignment="Center" FontSize="35"  Angle="0" FontColor="Green"/>
+                    </vc:Axis.AxisLabels>
+                    <vc:Axis.Ticks>
+                        <vc:Ticks TickLength="5" LineStyle="Dashed" LineThickness="0.24" ></vc:Ticks>
+                        <vc:Ticks TickLength="6" LineStyle="Dashed" LineThickness="0.24" ></vc:Ticks>
+                    </vc:Axis.Ticks>
+                </vc:Axis>
+            </vc:Chart.AxesX>
+
+            <vc:Chart.AxesY>
+                <vc:Axis LineThickness="0.5" Margin="0,0,0,0">
+                    <vc:Axis.AxisLabels>
+                        <vc:AxisLabels FontColor="Green"/>
+                    </vc:Axis.AxisLabels>
+                    <vc:Axis.Ticks>
+                        <vc:Ticks LineThickness="0.24" TickLength="7"/>
+                    </vc:Axis.Ticks>
+                </vc:Axis>
+            </vc:Chart.AxesY>
+
+            <vc:Chart.Series>
+                <vc:DataSeries RenderAs="Radar">
+                    <vc:DataSeries.DataPoints>
+                        <vc:DataPoint AxisXLabel="萝莉" YValue="{Binding Param1}"/>
+                        <vc:DataPoint AxisXLabel="女王" YValue="{Binding Param2}"/>
+                        <vc:DataPoint AxisXLabel="天然呆" YValue="{Binding Param3}"/>
+                        <vc:DataPoint AxisXLabel="吃货" YValue="{Binding Param4}"/>
+                        <vc:DataPoint AxisXLabel="伪娘" YValue="{Binding Param5}"/>
+                    </vc:DataSeries.DataPoints>
+                </vc:DataSeries>
+            </vc:Chart.Series>
+        </vc:Chart>
+    </Grid>
+</UserControl>

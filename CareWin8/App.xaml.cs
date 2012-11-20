@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
 using SinaWeiboSDK;
 // “空白应用程序”模板在 http://go.microsoft.com/fwlink/?LinkId=234227 上有介绍
 
@@ -31,23 +32,57 @@ namespace CareWin8
         /// 逻辑上等同于 main() 或 WinMain()。
         /// </summary>
         public App()
-        {
+        {           
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             Init();            
         }
 
-        private void Init()
+        private async void Init()
         {
             SinaWeiboInit();
-
+            RenrenInit();
+            StorageHelper<ObservableCollection<ItemViewModel>> stHelper =
+                new StorageHelper<ObservableCollection<ItemViewModel>>(StorageType.Local);
+            try
+            {
+                ObservableCollection<ItemViewModel> result = await stHelper.LoadASync("TopItems");
+                if (result != null)
+                    MainViewModel.TopItems = result;                
+            }
+            catch (System.Exception ex)
+            {
+                MainViewModel.TopItems = new ObservableCollection<ItemViewModel>();
+            }
         }
 
         private void SinaWeiboInit()
         {
-            SinaWeiboSDKData.AppKey = "466921770";
-            SinaWeiboSDKData.AppSecret = "548cb1a27cf896d304a9704e2be0e62e";
-            SinaWeiboSDKData.RedirectUri = "http://thankcreate.github.com/Care";
+            SinaWeiboSDK.SinaWeiboSDKData.AppKey = "466921770";
+            SinaWeiboSDK.SinaWeiboSDKData.AppSecret = "548cb1a27cf896d304a9704e2be0e62e";
+            SinaWeiboSDK.SinaWeiboSDKData.RedirectUri = "http://thankcreate.github.com/Care";
+        }
+
+        private void RenrenInit()
+        {
+            RenrenSDK.RenrenSDKData.ID = "214071";
+            RenrenSDK.RenrenSDKData.AppKey = "0b434803c2c7435691bd398eaf44d4fc";
+            RenrenSDK.RenrenSDKData.AppSecret = "172d2ba967924bc9b457983e1dba1127";
+            RenrenSDK.RenrenSDKData.RedirectUri = "http://thankcreate.github.com/Care/";
+            List<String> listScope = new List<String>{ 
+                "publish_feed",
+                "publish_blog", 
+                "publish_share",
+                "read_user_album", 
+                "read_user_status",
+                "read_user_photo",
+                "read_user_comment",
+                "read_user_status",
+                "publish_comment",
+                "read_user_share",                
+                "create_album", 
+                "photo_upload" };
+            RenrenSDK.RenrenSDKData.Scope = String.Join(",", listScope.ToArray());
         }
 
         /// <summary>

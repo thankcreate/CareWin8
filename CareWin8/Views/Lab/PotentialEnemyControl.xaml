@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="CareWin8.PotentialEnemyControl"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CareWin8"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vc="using:Visifire.Charts" 
+    xmlns:vg="using:Visifire.Gauges"
+    mc:Ignorable="d"
+    d:DesignHeight="500"
+    d:DesignWidth="600">
+    
+    <Grid>
+        <vc:Chart   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   x:Name="ChartLicensesSold" View3D="False" CornerRadius="2">
+            <vc:Chart.AxesY>
+                <vc:Axis LineThickness="0.5" Margin="0,0,0,0">
+                    <vc:Axis.AxisLabels>
+                        <vc:AxisLabels FontSize="20"  FontColor="Green"/>
+                    </vc:Axis.AxisLabels>
+                    <vc:Axis.Ticks>
+                        <vc:Ticks LineThickness="0.24" TickLength="7"/>
+                    </vc:Axis.Ticks>
+                </vc:Axis>
+            </vc:Chart.AxesY>
+            <vc:Chart.Titles>
+                <vc:Title Text="" HorizontalAlignment="Left" Padding="0,0,0,4" TextAlignment="Left" FontColor="#8c8c8c"/>
+            </vc:Chart.Titles>
+
+            <vc:Chart.Legends>
+                <vc:Legend VerticalAlignment="Top" MaxWidth="200" HorizontalAlignment="Left" Background="Transparent" ShadowEnabled="false" BorderThickness="0" EntryMargin="4" CornerRadius="7" Padding="2" FontColor="#8c8c8c" />
+            </vc:Chart.Legends>
+
+            <vc:Chart.AxesX>
+                <vc:Axis LineThickness="0">
+                    <vc:Axis.AxisLabels>
+                        <vc:AxisLabels TextAlignment="Center" FontSize="25"  Angle="0" FontColor="Green"/>
+                    </vc:Axis.AxisLabels>
+                    <vc:Axis.Ticks>
+                        <vc:Ticks TickLength="5" LineStyle="Dashed" LineThickness="0.24" ></vc:Ticks>
+                        <vc:Ticks TickLength="6" LineStyle="Dashed" LineThickness="0.24" ></vc:Ticks>
+                    </vc:Axis.Ticks>
+                </vc:Axis>
+            </vc:Chart.AxesX>
+
+            <vc:Chart.Series>
+                <vc:DataSeries LegendText="2006" RenderAs="Bubble" ZValueFormatString="#0.##" 
+                               ToolTipText="最近评论次数: #YValue" >
+                    <vc:DataSeries.DataPoints>
+                        <vc:DataPoint AxisXLabel="{Binding Name2}" YValue="{Binding Value2}" ZValue="{Binding Value2}"/>
+                        <vc:DataPoint AxisXLabel="{Binding Name1}" YValue="{Binding Value1}" ZValue="{Binding Value1}"/>
+                        <vc:DataPoint AxisXLabel="{Binding Name3}" YValue="{Binding Value3}" ZValue="{Binding Value3}"/>
+                    </vc:DataSeries.DataPoints>
+                </vc:DataSeries>
+            </vc:Chart.Series>
+        </vc:Chart>
+    </Grid>
+</UserControl>

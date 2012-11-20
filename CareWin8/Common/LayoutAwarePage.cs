@@ -83,6 +83,28 @@ namespace CareWin8.Common
                 Window.Current.CoreWindow.PointerPressed -=
                     this.CoreWindow_PointerPressed;
             };
+
+            this.SizeChanged += LayoutAwarePage_SizeChanged;
+        }
+
+        private bool m_bFirstComeIntoSizeChanged = true;
+        void LayoutAwarePage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (m_bFirstComeIntoSizeChanged)
+            {
+                m_bFirstComeIntoSizeChanged = false;
+                return;
+            }
+            if (ApplicationView.Value == ApplicationViewState.Snapped)
+            {             
+                {
+                    Frame.Navigate(typeof(SnappedStatusTimelineView));                    
+                }       
+            }
+            else
+            {
+                Frame.Navigate(typeof(MainPage));
+            }       
         }
 
         /// <summary>
@@ -330,6 +352,7 @@ namespace CareWin8.Common
         /// 属性提供要显示的组。</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            m_bFirstComeIntoSizeChanged = true;
             // 通过导航返回缓存页不应触发状态加载
             if (this._pageKey != null) return;
 

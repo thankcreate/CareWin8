@@ -11,8 +11,7 @@
     xmlns:mycontrol="using:CareWin8.MyControl"
     mc:Ignorable="d">
 
-    <Page.Resources>
-
+    <Page.Resources>        
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">My Application</x:String>
     </Page.Resources>
@@ -31,7 +30,7 @@
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <mycontrol:SinaWeiboLoginPopup x:Name ="sinaWeiboLoginPopup"/>
+        <!--<mycontrol:SinaWeiboLoginPopup x:Name ="sinaWeiboLoginPopup"/>-->
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
@@ -40,6 +39,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <TextBlock x:Name="pageTitle" Grid.Column="1" Text="帐号绑定" Style="{StaticResource PageHeaderTextStyle}"/>
+            <Button Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="642,92,0,0" VerticalAlignment="Top" Click="Test"/>
         </Grid>
         <Grid Grid.Row="1" >
             <ScrollViewer Padding="100,0,0,0"  FlowDirection="LeftToRight" VerticalScrollMode="Disabled">
@@ -86,6 +86,31 @@
                             <Button  Content="指定关注人" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboSelectFriend_Click"  />
                             <Button  Content="退出当前登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogout_Click"/>
                         </StackPanel>                       
+                    </Grid>
+
+                    <Grid Margin="20,0,0,0"  Width="335" Height="450" VerticalAlignment="Top">
+                        <Image Source="../../Images/Background/Item.png"></Image>
+                        <StackPanel>
+                            <TextBlock Text="RSS源" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>
+                            <Grid>
+                                <StackPanel Margin="20,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock Text="当前订阅站点名:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding FollowerSiteName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                
+                                <StackPanel Margin="20,0,0,0"    VerticalAlignment="Bottom">
+                                    <TextBlock Text="当前关注订阅地址:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock Text="{Binding FollowerSitePath}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        <StackPanel Margin="20,0,20,30"  VerticalAlignment="Bottom">
+                            <Button  Content="搜索" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssSearch_Click"  />
+                            <Button  Content="直接指定地址" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssSetPath_Click"  />
+                            <Button  Content="停止订阅" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssLogout_Click"/>
+                        </StackPanel>
                     </Grid>
 
                 </StackPanel>
