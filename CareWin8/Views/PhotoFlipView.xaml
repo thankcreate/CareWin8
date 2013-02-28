@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CareWin8"
+    xmlns:mycontrol="using:CareWin8.MyControl"
     xmlns:common="using:CareWin8.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -267,19 +268,22 @@
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Border MaxWidth="400"  Margin="0,0,10,10" Padding="10,10,10,10"  Background="Transparent"   VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                 <StackPanel>
-                                    <TextBlock TextWrapping="Wrap"  Text="{Binding Content}" Foreground="#ffd77c29"  FontSize="22" />
+                                    <TextBlock  FontFamily="Microsoft YaHei" TextWrapping="Wrap"  Text="{Binding Content}" Foreground="#ffd77c29"  FontSize="22" />
                                     <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-                                        <TextBlock HorizontalAlignment="Right"  TextWrapping="Wrap" Text="{Binding Time}" Foreground="Gray"  FontSize="16" />
-                                        <TextBlock HorizontalAlignment="Right"  Margin="20,0,0,0"  TextWrapping="Wrap" Text="{Binding TypeString}" Foreground="Gray"  FontSize="16" />
+                                        <TextBlock  FontFamily="Microsoft YaHei" HorizontalAlignment="Right"  TextWrapping="Wrap" Text="{Binding Time}" Foreground="Gray"  FontSize="16" />
+                                        <TextBlock  FontFamily="Microsoft YaHei" HorizontalAlignment="Right"  Margin="20,0,0,0"  TextWrapping="Wrap" Text="{Binding TypeString}" Foreground="Gray"  FontSize="16" />
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
-                            <ScrollViewer x:Name="scrollViewer" 
+
+                            <mycontrol:ImageInFlip x:Name="imageItem"  Source="{Binding FullUrl}" MyMaxHeight="{Binding MaxHeight, ElementName=pageRoot}" MyMaxWidth="{Binding MaxWidth, ElementName=pageRoot}" />
+                            <!--<ScrollViewer x:Name="scrollViewer" 
                                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                   VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" 
                                   ZoomMode="Enabled" MinZoomFactor="0.7">
                                 <Image x:Name="imageItem"  Source="{Binding FullUrl}" MaxHeight="{Binding MaxHeight, ElementName=pageRoot}" MaxWidth="{Binding MaxWidth, ElementName=pageRoot}" ></Image>
-                            </ScrollViewer>   
+                                <mycontrol:ImageInFlip x:Name="imageItem"  Source="{Binding FullUrl}" MaxHeight="{Binding MaxHeight, ElementName=pageRoot}" MaxWidth="{Binding MaxWidth, ElementName=pageRoot}" />
+                            </ScrollViewer>-->   
 
                         </Grid>                        
                     </DataTemplate>
@@ -293,7 +297,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="照片" Style="{StaticResource PageHeaderTextStyle}" />
+            <TextBlock  FontFamily="Microsoft YaHei" x:Name="pageTitle" Grid.Column="1" Text="照片" Style="{StaticResource PageHeaderTextStyle}" />
+            <Image Source="123" Width="20" Height="20"></Image>
         </Grid>
         
         <VisualStateManager.VisualStateGroups>

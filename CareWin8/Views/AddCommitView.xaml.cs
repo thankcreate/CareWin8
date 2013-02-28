@@ -68,8 +68,10 @@ namespace CareWin8{
             try
             {
                 Dictionary<String, Object> parameters = e.Parameter as Dictionary<String, Object>;
-                m_type = parameters["Type"] as EntryType?;
-                m_content = parameters["Content"] as String;
+                if(parameters.ContainsKey("Type"))
+                    m_type = parameters["Type"] as EntryType?;
+                if (parameters.ContainsKey("Content"))
+                    m_content = parameters["Content"] as String;
             }
             catch (System.Exception ex)
             {
@@ -178,13 +180,33 @@ namespace CareWin8{
             }
         }
 
-        private void RenrenSend()
+        private async void RenrenSend()
         {
-
+            RenrenSDK.ResultResponse response =
+                await App.RenrenAPI.StatusAPI.AddStatus(txtContent.Text);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.result == "1")
+            {
+                DialogHelper.ShowToastDialog("发送成功");
+                Frame.GoBack();
+            }
+            else
+            {
+                DialogHelper.ShowToastDialog("发送失败");
+            }
         }
-        private void DoubanSend()
+        private async void DoubanSend()
         {
-
+            DoubanSDK.BaseResponse response =
+               await App.DoubanAPI.ShuoAPI.AddStatus(txtContent.Text);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS)
+            {
+                DialogHelper.ShowToastDialog("发送成功");
+                Frame.GoBack();
+            }
+            else
+            {
+                DialogHelper.ShowToastDialog("发送失败");
+            }
         }
     }
 }

@@ -219,5 +219,25 @@
         </Style.Setters>
     </Style>
 
-    
+
+
+    <Style TargetType="mycontrol:ImageInFlip">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="mycontrol:ImageInFlip">                   
+                    <Grid>
+                        <ProgressRing x:Name="LoadingRing" HorizontalAlignment="Center"  VerticalAlignment="Center"  Width="50" Height="50" BorderThickness="6" Foreground="Blue"  IsActive="True" />
+                        <ScrollViewer x:Name="scrollViewer" 
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                      VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" 
+                                      ZoomMode="Enabled" MinZoomFactor="1">                        
+                            <Image  x:Name="imageItem"  Source="{TemplateBinding Source}"
+                                MaxHeight="{TemplateBinding MyMaxHeight}" MaxWidth="{TemplateBinding MyMaxWidth}"
+                                HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"/> 
+                        </ScrollViewer>                        
+                    </Grid>                               
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -14,6 +14,76 @@
     <Page.Resources>        
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">My Application</x:String>
+        <Style x:Key="ButtonStyle1" TargetType="Button">
+        	<Setter Property="Background" Value="{StaticResource ButtonBackgroundThemeBrush}"/>
+        	<Setter Property="Foreground" Value="{StaticResource ButtonForegroundThemeBrush}"/>
+        	<Setter Property="BorderBrush" Value="{StaticResource ButtonBorderThemeBrush}"/>
+        	<Setter Property="BorderThickness" Value="{StaticResource ButtonBorderThemeThickness}"/>
+        	<Setter Property="Padding" Value="12,4,12,4"/>
+        	<Setter Property="HorizontalAlignment" Value="Left"/>
+        	<Setter Property="VerticalAlignment" Value="Center"/>
+        	<Setter Property="FontFamily" Value="{StaticResource ContentControlThemeFontFamily}"/>
+        	<Setter Property="FontWeight" Value="SemiBold"/>
+        	<Setter Property="FontSize" Value="{StaticResource ControlContentThemeFontSize}"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="Button">
+        				<Grid>
+        					<VisualStateManager.VisualStateGroups>
+        						<VisualStateGroup x:Name="CommonStates">
+        							<VisualState x:Name="Normal"/>
+        							<VisualState x:Name="PointerOver">
+        								<Storyboard>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ButtonPointerOverBackgroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ButtonPointerOverForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="Pressed">
+        								<Storyboard>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ButtonPressedBackgroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ButtonPressedForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="Disabled">
+        								<Storyboard>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ButtonDisabledBackgroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ButtonDisabledForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        						</VisualStateGroup>
+        						<VisualStateGroup x:Name="FocusStates">
+        							<VisualState x:Name="Focused">
+        								<Storyboard>
+        									<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhite"/>
+        									<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualBlack"/>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="Unfocused"/>
+        							<VisualState x:Name="PointerFocused"/>
+        						</VisualStateGroup>
+        					</VisualStateManager.VisualStateGroups>
+        					<Border x:Name="Border" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="3" BorderBrush="#FFD67B29">
+        						<ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Foreground="#FFD67B29"/>
+        					</Border>
+        					<Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="#FFD67B29" StrokeDashArray="1,1"/>
+        					<Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}" StrokeDashArray="1,1"/>
+        				</Grid>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
     </Page.Resources>
 
     <!--
@@ -38,30 +108,31 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="帐号绑定" Style="{StaticResource PageHeaderTextStyle}"/>
-            <Button Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="642,92,0,0" VerticalAlignment="Top" Click="Test"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="帐号绑定" Style="{StaticResource PageHeaderTextStyle}"  FontFamily="Microsoft YaHei" />
         </Grid>
         <Grid Grid.Row="1" >
-            <ScrollViewer Padding="100,0,0,0"  FlowDirection="LeftToRight" VerticalScrollMode="Disabled">
+            <ScrollViewer Padding="0,0,0,0"   VerticalScrollMode="Disabled"  VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Auto"  HorizontalScrollMode="Enabled" >
                 <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
-                    <Grid  Width="335" Height="450" VerticalAlignment="Top">
+                    
+                    <!--新浪-->
+                    <Grid  Margin="100,0,0,0"  Width="335" Height="450" VerticalAlignment="Top">
                         <Image Source="../../Images/Background/Item.png"></Image>
                         <StackPanel>
-                            <TextBlock Text="新浪微博" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>                            
+                            <TextBlock Text="新浪微博" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29" FontFamily="Microsoft YaHei" ></TextBlock>                            
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="10"  >
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="7"  >
                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
                                         <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image> 
-                                        <Image Source="{Binding SinaWeiboAvatar}" Width="65" Height="65"></Image>
+                                        <Image Stretch="UniformToFill"  Source="{Binding SinaWeiboAvatar}" Width="65" Height="65"></Image>
                                     </Grid>                                    
                                 </Border>
                                 <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
-                                    <TextBlock Text="当前登陆用户:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding SinaWeiboName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei"  Text="当前登陆用户:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei"  TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding SinaWeiboName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
                                 </StackPanel>
                             </Grid>
                             <Grid Margin="0,10,0,0">
@@ -69,47 +140,137 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="15"  >
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="7"  >
                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
                                         <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image>
-                                        <Image Source="{Binding SinaWeiboFollowerAvatar}" Width="65" Height="65"></Image>
+                                        <Image Stretch="UniformToFill" Source="{Binding SinaWeiboFollowerAvatar}" Width="65" Height="65"></Image>
                                     </Grid>
                                 </Border>
                                 <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
-                                    <TextBlock Text="当前关注帐号:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
-                                    <TextBlock Text="{Binding SinaWeiboFollowerName}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock FontFamily="Microsoft YaHei"  Text="当前关注帐号:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock FontFamily="Microsoft YaHei"  Text="{Binding SinaWeiboFollowerName}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
                                 </StackPanel>
                             </Grid>    
                         </StackPanel>
                         <StackPanel Margin="20,0,20,30"  VerticalAlignment="Bottom">
-                            <Button  Content="登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogin_Click"  />
-                            <Button  Content="指定关注人" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboSelectFriend_Click"  />
-                            <Button  Content="退出当前登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogout_Click"/>
+                            <Button  FontFamily="Microsoft YaHei"  Content="登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogin_Click" Style="{StaticResource ButtonStyle1}"  />
+                            <Button  FontFamily="Microsoft YaHei"  Content="指定关注人" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboSelectFriend_Click" Style="{StaticResource ButtonStyle1}"  />
+                            <Button  FontFamily="Microsoft YaHei"  Content="退出当前登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="SinaWeiboLogout_Click" Style="{StaticResource ButtonStyle1}" />
                         </StackPanel>                       
                     </Grid>
 
-                    <Grid Margin="20,0,0,0"  Width="335" Height="450" VerticalAlignment="Top">
+                    <!--人人-->
+                    <Grid  Width="335" Height="450" VerticalAlignment="Top">
                         <Image Source="../../Images/Background/Item.png"></Image>
                         <StackPanel>
-                            <TextBlock Text="RSS源" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>
+                            <TextBlock FontFamily="Microsoft YaHei"  Text="人人网" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>
                             <Grid>
-                                <StackPanel Margin="20,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
-                                    <TextBlock Text="当前订阅站点名:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding FollowerSiteName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="7"  >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image>
+                                        <Image Stretch="UniformToFill" Source="{Binding RenrenAvatar}" Width="65" Height="65"></Image>
+                                    </Grid>
+                                </Border>
+                                <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock FontFamily="Microsoft YaHei"  Text="当前登陆用户:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei" TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding RenrenName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
                                 </StackPanel>
                             </Grid>
                             <Grid Margin="0,10,0,0">
-                                
-                                <StackPanel Margin="20,0,0,0"    VerticalAlignment="Bottom">
-                                    <TextBlock Text="当前关注订阅地址:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
-                                    <TextBlock Text="{Binding FollowerSitePath}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="7"  >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image>
+                                        <Image Stretch="UniformToFill" Source="{Binding RenrenFollowerAvatar}" Width="65" Height="65"></Image>
+                                    </Grid>
+                                </Border>
+                                <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="当前关注帐号:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="{Binding RenrenFollowerName}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
                         <StackPanel Margin="20,0,20,30"  VerticalAlignment="Bottom">
-                            <Button  Content="搜索" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssSearch_Click"  />
-                            <Button  Content="直接指定地址" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssSetPath_Click"  />
-                            <Button  Content="停止订阅" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssLogout_Click"/>
+                            <Button Style="{StaticResource ButtonStyle1}"  FontFamily="Microsoft YaHei"  Content="登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RenrenLogin_Click"  />
+                            <Button Style="{StaticResource ButtonStyle1}"  FontFamily="Microsoft YaHei"  Content="指定关注人" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RenrenSelectFriend_Click"  />
+                            <Button Style="{StaticResource ButtonStyle1}"  FontFamily="Microsoft YaHei"  Content="退出当前登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RenrenLogout_Click"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!--豆瓣-->
+                    <Grid  Width="335" Height="450" VerticalAlignment="Top">
+                        <Image Source="../../Images/Background/Item.png"></Image>
+                        <StackPanel>
+                            <TextBlock FontFamily="Microsoft YaHei"  Text="豆瓣社区" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="7"  >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image>
+                                        <Image Stretch="UniformToFill" Source="{Binding DoubanAvatar}" Width="65" Height="65"></Image>
+                                    </Grid>
+                                </Border>
+                                <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock FontFamily="Microsoft YaHei"  Text="当前登陆用户:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei" TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding DoubanName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border  Margin="20,0,0,0"  Width="80" Height="80"  Background="#FFd67b29" CornerRadius="7"  >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <Image Source="/Images/Thumb/DefaultAvatar.png" Width="65" Height="65"></Image>
+                                        <Image Stretch="UniformToFill" Source="{Binding DoubanFollowerAvatar}" Width="65" Height="65"></Image>
+                                    </Grid>
+                                </Border>
+                                <StackPanel Margin="10,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="当前关注帐号:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="{Binding DoubanFollowerName}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        <StackPanel Margin="20,0,20,30"  VerticalAlignment="Bottom">
+                            <Button Style="{StaticResource ButtonStyle1}"  FontFamily="Microsoft YaHei"  Content="登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="DoubanLogin_Click"  />
+                            <Button Style="{StaticResource ButtonStyle1}"  FontFamily="Microsoft YaHei"  Content="指定关注人" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="DoubanSelectFriend_Click"  />
+                            <Button Style="{StaticResource ButtonStyle1}"  FontFamily="Microsoft YaHei"  Content="退出当前登陆" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="DoubanLogout_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!--Rss-->
+                    <Grid Margin="20,0,0,0"  Width="335" Height="450" VerticalAlignment="Top">
+                        <Image Source="../../Images/Background/Item.png"></Image>
+                        <StackPanel>
+                            <TextBlock  FontFamily="Microsoft YaHei" Text="RSS源" Margin="20,10,0,10"  FontSize="30" Foreground="#FFd67b29"></TextBlock>
+                            <Grid>
+                                <StackPanel Margin="20,0,0,0"  Grid.Column="1"  VerticalAlignment="Bottom">
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="当前订阅站点名:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei" TextWrapping="Wrap" Margin="0,0,20,0"  Text="{Binding FollowerSiteName}" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <StackPanel Margin="20,0,0,0"    VerticalAlignment="Bottom">
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="当前关注订阅地址:" Foreground="Black"  FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                    <TextBlock  FontFamily="Microsoft YaHei" Text="{Binding FollowerSitePath}" Margin="0,0,20,0" TextWrapping="Wrap" Foreground="Black" FontSize="20" VerticalAlignment="Bottom" ></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        <StackPanel Margin="20,0,20,30"  VerticalAlignment="Bottom">
+                            <Button  Style="{StaticResource ButtonStyle1}" FontFamily="Microsoft YaHei"  Content="搜索" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssSearch_Click"  />
+                            <Button  Style="{StaticResource ButtonStyle1}" FontFamily="Microsoft YaHei"  Content="直接指定地址" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssSetPath_Click"  />
+                            <Button  Style="{StaticResource ButtonStyle1}" FontFamily="Microsoft YaHei"  Content="停止订阅" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="RssLogout_Click"/>
                         </StackPanel>
                     </Grid>
 

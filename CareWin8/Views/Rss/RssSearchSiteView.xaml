@@ -32,31 +32,30 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.RowSpan="3"  Margin="0,190,0,0"     >
-            <ProgressBar x:Name="LoadProgessBar" Margin="100,0,0,0"  ShowPaused="True"  Background="Transparent" IsIndeterminate="True" Value="0" />
-            <GridView  x:Name="SiteGridView" Padding="120,0,0,50" ItemsSource="{Binding SiteItems}" 
-                      SelectionMode="Single" SelectionChanged="SiteGridView_SelectionChanged">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Padding="0,0,0,5"  Width="400" Height="150"  Background="White" Opacity="0.9" BorderBrush="Gray" BorderThickness="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Margin="10,10,0,0"  Width="50" Height="50"  Source="/Images/Logo/rss_logo.png" VerticalAlignment="Top" HorizontalAlignment="Left" />
-                                <StackPanel Margin="10,10,5,0" Grid.Column="1">
-                                    <TextBlock FontSize="25" TextWrapping="Wrap"  Foreground="Black" Text="{Binding Title}"/>
-                                    <TextBlock FontSize="16"  Foreground="Black" TextWrapping="Wrap" Text="{Binding OriginPath}" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
-        </Grid>
 
-     
+        <ProgressBar  Grid.RowSpan="3" x:Name="LoadProgessBar" Margin="100,190,0,0"  VerticalAlignment="Center"  ShowPaused="True"  Background="Transparent" IsIndeterminate="True" Value="0" />
+        <GridView  Grid.RowSpan="3"   x:Name="SiteGridView" Padding="120,190,0,50" ItemsSource="{Binding SiteItems}" 
+                      SelectionMode="Single" SelectionChanged="SiteGridView_SelectionChanged">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="0,0,0,5"  Width="400" Height="150"  Background="White" Opacity="0.9" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Margin="10,10,0,0"  Width="50" Height="50"  Source="/Images/Logo/rss_logo.png" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                            <StackPanel Margin="10,10,5,0" Grid.Column="1">
+                                <TextBlock FontSize="25" TextWrapping="Wrap"  Foreground="Black" Text="{Binding Title}"/>
+                                <TextBlock FontSize="16"  Foreground="Black" TextWrapping="Wrap" Text="{Binding OriginPath}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+
+
 
         <!-- Back button and page title -->
         <Grid Grid.Row="0">
@@ -65,13 +64,15 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="RSS搜索" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock FontFamily="Microsoft YaHei"  x:Name="pageTitle" Grid.Column="1" Text="RSS搜索" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
 
         <StackPanel Grid.Row="1"  Orientation="Horizontal">
-            <TextBlock  Margin="100,0,0,0" FontSize="30"  Text="搜索" VerticalAlignment="Bottom"/>
-            <TextBox x:Name="txtSearch"  Width="300" Height="30"  HorizontalAlignment="Left" Margin="20,0,0,0"/>
-            <Button Content="搜索" FontSize="20"  Height="40" Width="100" Click="Search_Click" ></Button>
+            <TextBlock  FontFamily="Microsoft YaHei"  Margin="100,0,0,0" FontSize="30"  Text="搜索" VerticalAlignment="Bottom"/>
+            <TextBox  FontFamily="Microsoft YaHei" x:Name="txtSearch"  Width="300" Height="30"  HorizontalAlignment="Left" Margin="20,0,0,0" KeyDown="TextBox_KeyDown"/>            
+            <Border Width="60" Height="32" Margin="0,-1,0,0"  Background="Orange" Tapped="Search_Tapped"  >
+                <Image Width="22" Height="22" Source="/Images/Thumb/Find.png"  />
+            </Border>
         </StackPanel>
 
          

@@ -8,6 +8,13 @@ namespace CareWin8
 {
     public class MiscTool
     {
+        public static String RemoveHtmlTag(String input)
+        {
+            if (String.IsNullOrWhiteSpace(input))
+                return "";
+            return Windows.Data.Html.HtmlUtilities.ConvertToText(input);
+        }
+
         public static String GetMyName()
         {
             String myName = PreferenceHelper.GetPreference("SinaWeibo_NickName");

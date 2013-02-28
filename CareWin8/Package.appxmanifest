@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="f72653f0-ad16-40db-88ac-c3dec27ab599" Publisher="CN=Tron" Version="1.0.0.0" />
+  <Identity Name="12392ThankCreate.1922282FD512C" Publisher="CN=1EE03617-47FC-4AA3-97AE-D32CB7ECB900" Version="1.1.1.0" />
   <Properties>
-    <DisplayName>CareWin8</DisplayName>
+    <DisplayName>我只在乎你</DisplayName>
     <PublisherDisplayName>ThankCreate</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CareWin8.App">
-      <VisualElements DisplayName="CareWin8" Logo="Assets\150x150.png" SmallLogo="Assets\30x30.png" Description="CareWin8" ForegroundText="light" BackgroundColor="#009ebf" ToastCapable="true">
+      <VisualElements DisplayName="我只在乎你" Logo="Assets\150x150.png" SmallLogo="Assets\30x30.png" Description="CareWin8" ForegroundText="light" BackgroundColor="#009ebf" ToastCapable="true">
         <DefaultTile ShowName="allLogos" WideLogo="Assets\310x150.png" ShortName="我只在乎你" />
         <SplashScreen Image="Assets\splash_620x300.png" BackgroundColor="#009ebf" />
         <InitialRotationPreference>
@@ -25,6 +25,7 @@
     </Application>
   </Applications>
   <Capabilities>
+    <Capability Name="picturesLibrary" />
     <Capability Name="internetClient" />
   </Capabilities>
 </Package>

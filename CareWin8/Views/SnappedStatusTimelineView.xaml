@@ -37,7 +37,7 @@
             </Grid.ColumnDefinitions>
             
             <Image Source="/Images/Thumb/Heart_transparent.png" Width="60" Height="60" />
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="我只在乎你" Foreground="#FF0F80F1" FontSize="30" 
+            <TextBlock  x:Name="pageTitle" Grid.Column="1" Text="我只在乎你" Foreground="#FF0F80F1" FontSize="30" 
                        HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="0,13,0,0"/>
             <Image Grid.Column="2"  Source="/Images/Thumb/Refresh_skyblue.png" Width="35" HorizontalAlignment="Right" Margin="0,0,20,0" Tapped="Refresh_Tapped" />
         </Grid>
@@ -60,24 +60,24 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Image Margin="0,0,0,0"  Width="50" Height="50"  Source="{Binding IconURL}" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Margin="10,0,0,-2"  FontSize="22" TextWrapping="Wrap"   Foreground="#FF0F80F1" VerticalAlignment="Bottom"  Text="{Binding Title}"/>
+                            <TextBlock FontFamily="Microsoft YaHei"  Grid.Column="1" Margin="10,0,0,-2"  FontSize="22" TextWrapping="Wrap"   Foreground="#FF0F80F1" VerticalAlignment="Bottom"  Text="{Binding Title}"/>
                         </Grid>
 
-                        <TextBlock Grid.Row="1" Margin="0,5,0,0"  FontSize="15"  TextWrapping="Wrap" Foreground="Black" Text="{Binding Content}" />
+                        <TextBlock FontFamily="Microsoft YaHei"  Grid.Row="1" Margin="0,5,0,0"  FontSize="15"  TextWrapping="Wrap" Foreground="Black" Text="{Binding Content}" />
                         <Grid Grid.Row="2" MaxWidth="300" Visibility="{Binding IsImageExists}" >
                             <Image Source="{Binding MidImageURL}" MaxHeight="300"  Stretch="Uniform" Margin="5,5,5,0"  VerticalAlignment="Top" HorizontalAlignment="Center"  />
                         </Grid>
 
                         <Border Grid.Row="3"  Margin="0,5,0,0"  Padding="5, 5, 5, 5"  BorderBrush="#ffafafaf" BorderThickness="1"  Background="#ffefefef"  Visibility="{Binding IsForwardItemExists}" >
                             <StackPanel>
-                                <TextBlock FontSize="14"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ForwardItem.Title}" />
-                                <TextBlock FontSize="14"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ForwardItem.Content}" />
+                                <TextBlock  FontFamily="Microsoft YaHei" FontSize="14"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ForwardItem.Title}" />
+                                <TextBlock  FontFamily="Microsoft YaHei" FontSize="14"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ForwardItem.Content}" />
                                 <Grid  MaxWidth="300" Visibility="{Binding  ForwardItem.IsImageExists}" >
                                     <Image Source="{Binding ForwardItem.MidImageURL}" MaxHeight="300"  Stretch="UniformToFill"  Margin="10,0,10,0"  VerticalAlignment="Top" HorizontalAlignment="Center"  />
                                 </Grid>
                             </StackPanel>
                         </Border>
-                        <TextBlock  Grid.Row="4" Margin="0,5,0,0" Foreground="Gray"  VerticalAlignment="Bottom"  Text="{Binding Time}" FontSize="14" />
+                        <TextBlock   FontFamily="Microsoft YaHei" Grid.Row="4" Margin="0,5,0,0" Foreground="Gray"  VerticalAlignment="Bottom"  Text="{Binding Time}" FontSize="14" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

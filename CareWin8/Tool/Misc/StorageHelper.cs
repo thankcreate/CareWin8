@@ -61,7 +61,7 @@ namespace CareWin8
             }
             catch (Exception)
             {
-                throw;
+                
             }
         }
         public async Task<T> LoadASync(string FileName)
@@ -84,8 +84,7 @@ namespace CareWin8
             }
             catch (Exception)
                  {
-                //Unable to load contents of file
-                throw;
+                     return default(T);
             }
         }
 

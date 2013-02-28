@@ -5,13 +5,15 @@ using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Collections.ObjectModel;
-
+using Windows.UI.Xaml.Media.Imaging;
 namespace CareWin8
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        
         public MainViewModel()
         {
+            
             this.Items = new ObservableCollection<ItemViewModel>();
             this.TopItems = new ObservableCollection<ItemViewModel>();
             this.ListItems = new List<ItemViewModel>();
@@ -24,12 +26,14 @@ namespace CareWin8
             this.ListPictureItems = new List<PictureItemViewModel>();
             this.SinaWeiboPicItems = new List<PictureItemViewModel>();
             this.RenrenPicItems = new List<PictureItemViewModel>();
-            this.RssPicItems = new List<PictureItemViewModel>();          
+            this.RssPicItems = new List<PictureItemViewModel>();
+            this.DoubanPicItems = new List<PictureItemViewModel>();   
 
             this.ItemsNeedRefresh = 2;            
             this.IsChanged = true;
-        }
 
+            
+        }       
 
         // Main items
         public ObservableCollection<ItemViewModel> Items { get;  set; }  //所有的源集成到一起的全集
@@ -47,10 +51,11 @@ namespace CareWin8
         
     
         // Pic items
-        public ObservableCollection<PictureItemViewModel> PictureItems { get; private set; }
+        public ObservableCollection<PictureItemViewModel> PictureItems { get; set; }
         public List<PictureItemViewModel> ListPictureItems { get; private set; }
         public List<PictureItemViewModel> SinaWeiboPicItems { get; private set; }
         public List<PictureItemViewModel> RenrenPicItems { get; private set; }
+        public List<PictureItemViewModel> DoubanPicItems { get; private set; }
         public List<PictureItemViewModel> RssPicItems { get; private set; }
 
        

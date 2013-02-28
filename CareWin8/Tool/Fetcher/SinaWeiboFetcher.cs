@@ -32,25 +32,36 @@ namespace CareWin8
 
         public async void FetchSingleStatusComment(string id, List<CommentMan> addList)
         {
-            GetStatusCommentsResponse res = await App.SinaWeiboAPI.CommentAPI.GetStatusComments(id);
-            if (res.Error == RestBase.RestError.ERROR_SUCCESS && res.comments != null)
+            try
             {
-                foreach (Comment comment in res.comments)
+                GetStatusCommentsResponse res = await App.SinaWeiboAPI.CommentAPI.GetStatusComments(id);
+                if (res.Error == RestBase.RestError.ERROR_SUCCESS && res.comments != null)
                 {
-                    // 要去掉她自己啊！！！！你个2货
-                    String herID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
-                    if (comment.user.id != herID)
+                    foreach (Comment comment in res.comments)
                     {
-                        CommentMan man = new CommentMan
+                        // 要去掉她自己啊！！！！你个2货
+                        String herID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
+                        String myID = PreferenceHelper.GetPreference("SinaWeibo_ID");
+                        if (comment.user.id != herID && comment.user.id != myID)
                         {
-                            name = comment.user.screen_name,
-                            id = comment.user.id
-                        };
-                        addList.Add(man);
+                            CommentMan man = new CommentMan
+                            {
+                                name = comment.user.screen_name,
+                                id = comment.user.id
+                            };
+                            addList.Add(man);
+                        }
                     }
-                }     
-            }            
-            m_taskHelper.PopTask();            
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+            finally
+            {
+                m_taskHelper.PopTask();
+            }
         }
     }
 }

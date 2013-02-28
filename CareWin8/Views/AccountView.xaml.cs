@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CareWin8.MyControl;
-using SinaWeiboSDK;
 using RestBase;
 using Windows.Web.Syndication;
 
@@ -69,6 +68,94 @@ namespace CareWin8
         }
         #endregion
 
+        #region RenrenNameProperty
+        public static readonly DependencyProperty RenrenNameProperty =
+            DependencyProperty.Register("RenrenName", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string RenrenName
+        {
+            get { return (string)GetValue(RenrenNameProperty); }
+            set { SetValue(RenrenNameProperty, value); }
+        }
+        #endregion
+
+        #region RenrenAvatarProperty
+        public static readonly DependencyProperty RenrenAvatarProperty =
+            DependencyProperty.Register("RenrenAvatar", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string RenrenAvatar
+        {
+            get { return (string)GetValue(RenrenAvatarProperty); }
+            set { SetValue(RenrenAvatarProperty, value); }
+        }
+        #endregion
+
+        #region RenrenFollowerNameProperty
+        public static readonly DependencyProperty RenrenFollowerNameProperty =
+            DependencyProperty.Register("RenrenFollowerName", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string RenrenFollowerName
+        {
+            get { return (string)GetValue(RenrenFollowerNameProperty); }
+            set { SetValue(RenrenFollowerNameProperty, value); }
+        }
+        #endregion
+
+        #region RenrenFollowerAvatarProperty
+        public static readonly DependencyProperty RenrenFollowerAvatarProperty =
+            DependencyProperty.Register("RenrenFollowerAvatar", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string RenrenFollowerAvatar
+        {
+            get { return (string)GetValue(RenrenFollowerAvatarProperty); }
+            set { SetValue(RenrenFollowerAvatarProperty, value); }
+        }
+        #endregion
+
+        #region DoubanNameProperty
+        public static readonly DependencyProperty DoubanNameProperty =
+            DependencyProperty.Register("DoubanName", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string DoubanName
+        {
+            get { return (string)GetValue(DoubanNameProperty); }
+            set { SetValue(DoubanNameProperty, value); }
+        }
+        #endregion
+
+        #region DoubanAvatarProperty
+        public static readonly DependencyProperty DoubanAvatarProperty =
+            DependencyProperty.Register("DoubanAvatar", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string DoubanAvatar
+        {
+            get { return (string)GetValue(DoubanAvatarProperty); }
+            set { SetValue(DoubanAvatarProperty, value); }
+        }
+        #endregion
+
+        #region DoubanFollowerNameProperty
+        public static readonly DependencyProperty DoubanFollowerNameProperty =
+            DependencyProperty.Register("DoubanFollowerName", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string DoubanFollowerName
+        {
+            get { return (string)GetValue(DoubanFollowerNameProperty); }
+            set { SetValue(DoubanFollowerNameProperty, value); }
+        }
+        #endregion
+
+        #region DoubanFollowerAvatarProperty
+        public static readonly DependencyProperty DoubanFollowerAvatarProperty =
+            DependencyProperty.Register("DoubanFollowerAvatar", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
+
+        public string DoubanFollowerAvatar
+        {
+            get { return (string)GetValue(DoubanFollowerAvatarProperty); }
+            set { SetValue(DoubanFollowerAvatarProperty, value); }
+        }
+        #endregion
+
         #region FollowerSiteNameProperty
         public static readonly DependencyProperty FollowerSiteNameProperty =
             DependencyProperty.Register("FollowerSiteName", typeof(string), typeof(AccountView), new PropertyMetadata((string)""));
@@ -99,6 +186,8 @@ namespace CareWin8
         private void RefreshUI()
         {
             RefreshUI_SinaWeibo();
+            RefreshUI_Renren();
+            RefreshUI_Douban();
             RefreshUI_Rss();
             
         }
@@ -117,6 +206,38 @@ namespace CareWin8
             {
                 SinaWeiboFollowerName = "未关注";
             }    
+        }
+
+        private void RefreshUI_Renren()
+        {
+            RenrenName = PreferenceHelper.GetPreference("Renren_NickName");
+            RenrenFollowerName = PreferenceHelper.GetPreference("Renren_FollowerNickName");
+            RenrenAvatar = PreferenceHelper.GetPreference("Renren_Avatar");
+            RenrenFollowerAvatar = PreferenceHelper.GetPreference("Renren_FollowerAvatar");
+            if (string.IsNullOrEmpty(RenrenName))
+            {
+                RenrenName = "未登陆";
+            }
+            if (string.IsNullOrEmpty(RenrenFollowerName))
+            {
+                RenrenFollowerName = "未关注";
+            } 
+        }
+
+        private void RefreshUI_Douban()
+        {
+            DoubanName = PreferenceHelper.GetPreference("Douban_NickName");
+            DoubanFollowerName = PreferenceHelper.GetPreference("Douban_FollowerNickName");
+            DoubanAvatar = PreferenceHelper.GetPreference("Douban_Avatar");
+            DoubanFollowerAvatar = PreferenceHelper.GetPreference("Douban_FollowerAvatar");
+            if (string.IsNullOrEmpty(DoubanName))
+            {
+                DoubanName = "未登陆";
+            }
+            if (string.IsNullOrEmpty(DoubanFollowerName))
+            {
+                DoubanFollowerName = "未关注";
+            }
         }
 
         private void RefreshUI_Rss()
@@ -181,14 +302,14 @@ namespace CareWin8
         // 新浪微博取当前用户信息，要先取当前用户id，再用此id去查用户信息
         private async void SinaWeiboRefreshAccount()
         {
-            GetUIDResponse uidResponse = await App.SinaWeiboAPI.AccountAPI.GetUID();
+            SinaWeiboSDK.GetUIDResponse uidResponse = await App.SinaWeiboAPI.AccountAPI.GetUID();
             if (uidResponse.Error == RestError.ERROR_SUCCESS && uidResponse.uid != null)
             {
                 String uid = uidResponse.uid;
-                GetUserInfoResponse userInfoResponse = await App.SinaWeiboAPI.UserAPI.GetUserInfo(uid);
+                SinaWeiboSDK.GetUserInfoResponse userInfoResponse = await App.SinaWeiboAPI.UserAPI.GetUserInfo(uid);
                 if (userInfoResponse.Error == RestError.ERROR_SUCCESS && userInfoResponse.User != null)
                 {
-                    User user = userInfoResponse.User;
+                    SinaWeiboSDK.User user = userInfoResponse.User;
                     PreferenceHelper.SetPreference("SinaWeibo_ID", uid);
                     PreferenceHelper.SetPreference("SinaWeibo_NickName", user.screen_name);
                     PreferenceHelper.SetPreference("SinaWeibo_Avatar", user.profile_image_url);
@@ -213,6 +334,8 @@ namespace CareWin8
         {
             SinaWeiboName = "未登陆";
             SinaWeiboFollowerName = "未关注";
+            SinaWeiboAvatar = "";
+            SinaWeiboFollowerAvatar = "";
             PreferenceHelper.RemoveSinaWeiboPreference();
             App.SinaWeiboAPI.Logout();
             App.MainViewModel.IsChanged = true;
@@ -284,11 +407,12 @@ namespace CareWin8
         }
         #endregion
 
-        private void Test(object sender, RoutedEventArgs e)
+        #region Renren Event
+        private void RenrenLogin_Click(object sender, RoutedEventArgs e)
         {
             RenrenLoginControl.AuthSuccessComplete = new Action(() =>
             {
-                
+                RenrenRefreshAccount();
             });
             PopControl pc = new PopControl();
             RenrenLoginControl sinaPopup = new RenrenLoginControl(pc);
@@ -296,6 +420,101 @@ namespace CareWin8
             pc.ShowPop();
         }
 
+        private async void RenrenRefreshAccount()
+        {
+            RenrenSDK.GetUIDResponse uidResponse = await App.RenrenAPI.UserAPI.GetUID();
+            if (uidResponse.Error == RestError.ERROR_SUCCESS && uidResponse.uid != null)
+            {
+                String uid = uidResponse.uid;
+                RenrenSDK.GetUserInfoResponse userInfoResponse = await App.RenrenAPI.UserAPI.GetUserInfo(uid);
+                if (userInfoResponse.Error == RestError.ERROR_SUCCESS
+                    && userInfoResponse.UserList != null
+                    && userInfoResponse.UserList.Count > 0)
+                {
+                    RenrenSDK.User user = userInfoResponse.UserList[0];
+                    PreferenceHelper.SetPreference("Renren_ID", uid);
+                    PreferenceHelper.SetPreference("Renren_NickName", user.name);
+                    PreferenceHelper.SetPreference("Renren_Avatar", user.tinyurl);
+                    RenrenName = user.name;
+                    RenrenAvatar = user.tinyurl;
+                }
+            }
+        }
+
+        private void RenrenSelectFriend_Click(object sender, RoutedEventArgs e)
+        {
+            String id = PreferenceHelper.GetPreference("Renren_ID");
+            if (String.IsNullOrEmpty(id))
+                return;
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Type", EntryType.Renren);
+            parameters.Add("MyID", id);
+            Frame.Navigate(typeof(SelectFriendView), parameters);
+        }
+
+        private void RenrenLogout_Click(object sender, RoutedEventArgs e)
+        {
+            RenrenName = "未登陆";
+            RenrenFollowerName = "未关注";
+            RenrenAvatar = "";
+            RenrenFollowerAvatar = "";
+            PreferenceHelper.RemoveRenrenPreference();
+            App.RenrenAPI.Logout();
+            App.MainViewModel.IsChanged = true;
+        }
+        #endregion
+
+        #region Douban Event
+        private void DoubanLogin_Click(object sender, RoutedEventArgs e)
+        {
+            DoubanLoginControl.AuthSuccessComplete = new Action(() =>
+            {
+                DoubanRefreshAccount();
+            });
+            PopControl pc = new PopControl();
+            DoubanLoginControl sinaPopup = new DoubanLoginControl(pc);
+            pc.SetCustomContent(sinaPopup);
+            pc.ShowPop();
+        }
+         // 新浪微博取当前用户信息，要先取当前用户id，再用此id去查用户信息
+        private async void DoubanRefreshAccount()
+        {
+            DoubanSDK.GetUserInfoResponse userInfoResponse = await App.DoubanAPI.UserAPI.GetMyUserInfo();
+            if (userInfoResponse.Error == RestError.ERROR_SUCCESS && userInfoResponse.UserInfo != null)
+            {
+                DoubanSDK.UserInfo user = userInfoResponse.UserInfo;
+                PreferenceHelper.SetPreference("Douban_ID", user.id);
+                PreferenceHelper.SetPreference("Douban_NickName", user.name);
+                PreferenceHelper.SetPreference("Douban_Avatar", user.avatar);
+                DoubanName = user.name;
+                DoubanAvatar = user.avatar;
+            }
+          
+        }
+
+        private void DoubanSelectFriend_Click(object sender, RoutedEventArgs e)
+        {
+            String id = PreferenceHelper.GetPreference("Douban_ID");
+            if (String.IsNullOrEmpty(id))
+                return;
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Type", EntryType.Douban);
+            parameters.Add("MyID", id);
+            Frame.Navigate(typeof(SelectFriendView), parameters);
+        }
+
+        private void DoubanLogout_Click(object sender, RoutedEventArgs e)
+        {
+            DoubanName = "未登陆";
+            DoubanFollowerName = "未关注";
+            DoubanAvatar = "";
+            DoubanFollowerAvatar = "";
+            PreferenceHelper.RemoveDoubanPreference();
+            App.DoubanAPI.Logout();
+            App.MainViewModel.IsChanged = true;
+        }
+        #endregion
+   
 
     }
 }

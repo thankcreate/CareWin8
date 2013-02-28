@@ -8,21 +8,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mycontrol="using:CareWin8.MyControl"
-    mc:Ignorable="d" >
+    mc:Ignorable="d" Loaded="PageLoaded" >
     
     
     <Page.Resources>
         <local:HomePageStatusDataTemplateSelector x:Key="HomePageStatusTemplateSelector">
             <local:HomePageStatusDataTemplateSelector.SmallStatusTemplate>
                 <DataTemplate>
-                    <Border  Padding="0,0,0,0"  Width="400" Height="250"  Background="White"  BorderBrush="White" BorderThickness="2">
+                    <Border Tapped="Item_Tapped" Padding="0,0,0,0"  Width="400" Height="250"  Background="White"  BorderBrush="White" BorderThickness="2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Image Margin="10,10,0,0"  Width="50" Height="50"  Source="{Binding IconURL}" VerticalAlignment="Top" HorizontalAlignment="Left" />
-                            <Grid Margin="10,10,5,0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                            <Image Margin="10,10,0,0"  Stretch="UniformToFill"  Width="50" Height="50"  Source="{Binding IconURL}" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                            <Grid Margin="10,10,5,0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -30,30 +30,30 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0"  FontSize="25" TextWrapping="NoWrap" Text="{Binding Title}" Foreground="#FF0F80F1"/>
+                                <TextBlock  FontFamily="Microsoft YaHei" Grid.Row="0"  FontSize="22" TextWrapping="NoWrap" Text="{Binding Title}" Foreground="#FF0F80F1"/>
                                 <Grid Grid.Row="1" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock FontSize="20"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ContentShortWhenForwardAndTooLong}" />
+                                    <TextBlock Margin="0,3,0,0"  FontFamily="Microsoft YaHei" FontSize="18"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ContentShortWhenForwardAndTooLong}" />
                                     <Grid Grid.Column="1" MaxWidth="100" Visibility="{Binding IsImageExists}" >
-                                        <Image Source="{Binding ImageURL}" Width="90"  Stretch="Uniform" Margin="5,4,10,0"  VerticalAlignment="Top" HorizontalAlignment="Center"  />
+                                        <Image Source="{Binding ImageURL}" Tapped="ContentImage_Tapped"  Width="90"  Stretch="Uniform" Margin="5,4,10,0"  VerticalAlignment="Top" HorizontalAlignment="Center"  />
                                     </Grid>
                                 </Grid>
-                                <Border Grid.Row="2"  Height="130"  Margin="0,5,0,0"  Padding="5, 5, 5, 5"  BorderBrush="#ffafafaf" BorderThickness="1"  Background="#ffefefef"  Visibility="{Binding IsForwardItemExists}" >
+                                <Border HorizontalAlignment="Stretch"  Grid.Row="2"  Height="130"  Margin="0,5,0,0"  Padding="5, 5, 5, 5"  BorderBrush="#ffafafaf" BorderThickness="1"  Background="#ffefefef"  Visibility="{Binding IsForwardItemExists}" >
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock FontSize="18"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ForwardItem.ContentWithSpeaker}" />
+                                        <TextBlock  FontFamily="Microsoft YaHei" FontSize="15"  TextWrapping="Wrap" Foreground="Black" Text="{Binding ForwardItem.ContentWithSpeaker}" />
                                         <Grid Grid.Column="1" MaxWidth="100" Visibility="{Binding  ForwardItem.IsImageExists}" >
-                                            <Image Source="{Binding ForwardItem.ImageURL}" Width="90"  Stretch="None" Margin="5,0,10,0"  VerticalAlignment="Top" HorizontalAlignment="Center"  />
+                                            <Image Source="{Binding ForwardItem.ImageURL}" Tapped="ForwardImage_Tapped"  Width="90"  Stretch="None" Margin="5,0,10,0"  VerticalAlignment="Top" HorizontalAlignment="Center"  />
                                         </Grid>
                                     </Grid>
                                 </Border>
-                                <TextBlock Margin="0,0,0,4"  Grid.Row="3" VerticalAlignment="Bottom"  Text="{Binding Time}" Foreground="Black"  FontSize="18" />
+                                <TextBlock Margin="0,0,0,4"  Grid.Row="3" VerticalAlignment="Bottom"  Text="{Binding Time}" Foreground="Black"  FontSize="15" />
                             </Grid>
                         </Grid>
                     </Border>
@@ -61,18 +61,18 @@
             </local:HomePageStatusDataTemplateSelector.SmallStatusTemplate>
             <local:HomePageStatusDataTemplateSelector.ShowMoreTemplate>
                 <DataTemplate>
-                    <Border  Padding="0,0,0,0"  Width="400" Height="250"  Background="White"  BorderBrush="White" BorderThickness="2">
+                    <Border Tapped="Item_Tapped"  Padding="0,0,0,0"  Width="400" Height="250"  Background="White"  BorderBrush="White" BorderThickness="2">
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <TextBlock Text="更多..." FontSize="50" Foreground="#FF0F80F1" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                            <TextBlock  FontFamily="Microsoft YaHei" Text="更多..." FontSize="50" Foreground="#FF0F80F1" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
                         </Grid>                        
                     </Border>
                 </DataTemplate>
             </local:HomePageStatusDataTemplateSelector.ShowMoreTemplate>
             <local:HomePageStatusDataTemplateSelector.NothingTemplate>
                 <DataTemplate>
-                    <Border  Padding="20,0,20,0"  Width="400" Height="250"  Background="White"  BorderBrush="White" BorderThickness="2">
+                    <Border Tapped="Item_Tapped" Padding="20,0,20,0"  Width="400" Height="250"  Background="White"  BorderBrush="White" BorderThickness="2">
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <TextBlock Text="没有得到任何结果的说~ 请先设置好关注人" TextWrapping="Wrap"  FontSize="25" Foreground="#FF0F80F1" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                            <TextBlock  FontFamily="Microsoft YaHei" Text="没有得到任何结果的说~ 请确保网络通畅。如果尚未设置关注人，请点我设置关注人" TextWrapping="Wrap"  FontSize="25" Foreground="#FF0F80F1" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -81,50 +81,54 @@
        
     </Page.Resources>
     
-    <Grid >
+    <Grid x:Name="rootGrid" >
         <Grid.Background>
-            <ImageBrush ImageSource="../../Images/Background/Day.PNG" />
+            <ImageBrush x:Name="backgoundBrush"  />
         </Grid.Background>
-
         
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="130"/>
             <RowDefinition Height="10" />
             <RowDefinition Height="*"/>            
-        </Grid.RowDefinitions>       
-        
-        <ScrollViewer Grid.RowSpan="3" Margin="0,150,0,0"  x:Name="MainScrollViewer"  Opacity="0.9"   VerticalScrollMode="Disabled"  VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Auto"  HorizontalScrollMode="Enabled"  >
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.RowSpan="3" Padding="0,140,0,0"  x:Name="MainScrollViewer" 
+                      VerticalScrollMode="Disabled"  VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Auto" 
+                      HorizontalScrollMode="Enabled" ZoomMode="Disabled" >
             <StackPanel Orientation="Horizontal">
                 <!--动态-->
                 <StackPanel Margin="100,0,0,0">
-                    <TextBlock Padding="0,0,0,0"  Text="动态" FontSize="30" />
-                    <GridView ScrollViewer.HorizontalScrollMode="Disabled"  x:Name="StatusGridView" ItemsSource="{Binding TopItems}"  SelectionMode="Single"
-                           Height="600" Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionChanged="StatusGridView_SelectionChanged"
-                           ItemTemplateSelector="{StaticResource HomePageStatusTemplateSelector}">                        
+                    <TextBlock Tapped="StatusLable_Tapped"  FontFamily="Microsoft YaHei" Padding="0,0,0,0"  Text="动态" FontSize="30" />
+                    <GridView  Opacity="0.9" Height="{Binding StatusGridViewHeight, ElementName=pageRoot}"  ScrollViewer.HorizontalScrollMode="Disabled"  x:Name="StatusGridView" ItemsSource="{Binding TopItems}"  SelectionMode="None"
+                           Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                           ItemTemplateSelector="{StaticResource HomePageStatusTemplateSelector}"  >                        
                     </GridView>
                 </StackPanel>
                 <!--图片-->
                 <StackPanel Margin="100,0,0,0"  Orientation="Vertical">
-                    <TextBlock Padding="0,0,0,0"  Text="图片" FontSize="30" />
-                    <GridView  ScrollViewer.HorizontalScrollMode="Disabled"  x:Name="PictureGridView" ItemsSource="{Binding PictureItems}" SelectionMode="Single"
-                           Height="600" Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IncrementalLoadingTrigger="None" SelectionChanged="PictureGridView_SelectionChanged" >
+                    <TextBlock Tapped="PictureLable_Tapped"  FontFamily="Microsoft YaHei" Padding="0,0,0,0"  Text="图片" FontSize="30" />
+                    <mycontrol:PicGridView ScrollViewer.HorizontalScrollMode="Disabled"  x:Name="PictureGridView" ItemsSource="{Binding PictureItems}" SelectionMode="Single"
+                           Height="{Binding StatusGridViewHeight, ElementName=pageRoot}" Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IncrementalLoadingTrigger="None" SelectionChanged="PictureGridView_SelectionChanged" >
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid ItemHeight="173" ItemWidth="173" MaximumRowsOrColumns="{Binding PicGridViewMaxRow, ElementName=pageRoot}"  Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Image Width="173" Height="173" Source="{Binding Url}" Stretch="UniformToFill"></Image>
-                                <!--<mycontrol:HubTile 
-                                    Title="{Binding Title}" 
-                                    Message="{Binding Content}"
-                                    Source="{Binding Url}"
-                                    Visibility="{Binding IsImageExists}" 
-                                    Background="#FF4F55D1"  />-->                                
+                                <Grid>
+                                    <Image Source="/Images/Thumb/Picture.png" Stretch="Fill" />
+                                    <Image Source="{Binding SmartUrl}" Stretch="UniformToFill"></Image>
+                                </Grid>
+                                
                             </DataTemplate>
                         </GridView.ItemTemplate>
-                    </GridView>
+                    </mycontrol:PicGridView>
                 </StackPanel>      
                 <!--奇怪的地方-->
-                <StackPanel Margin="100,0,0,0"  Orientation="Vertical">
-                    <TextBlock Padding="0,0,0,0"  Text="奇怪的地方" FontSize="30" />
-                    <Grid>
+                <StackPanel Margin="100,0,100,0"  Orientation="Vertical">
+                    <TextBlock  FontFamily="Microsoft YaHei" Padding="0,0,0,0"  Text="奇怪的地方" FontSize="30" />
+                    <Grid Opacity="0.9" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="183"/>
                             <ColumnDefinition Width="183"/>
@@ -144,12 +148,11 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Grid>
+        <Grid HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock  x:Name="pageTitle" Text="   我只在乎你" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock FontFamily="Microsoft YaHei"   x:Name="pageTitle" Text="   我只在乎你" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
 
         <ProgressBar x:Name="MainProgessBar" ShowPaused="True"  Grid.Row="1" Background="Transparent" IsIndeterminate="True" Value="0" />
@@ -161,12 +164,12 @@
         <AppBar x:Name="topAppBar"  Background="#ffd77c29" Height="110" BorderBrush="#ffd77c29">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <StackPanel  Orientation="Horizontal" Tapped="Account_Tapped" >
-                    <Image Margin="10,-5,0,0" Source="/Images/Bar/Account.png" Width="45" />
-                    <TextBlock Text="帐号绑定" FontSize="40" VerticalAlignment="Center"/>
+                    <Image Margin="10,0,5,0" Source="/Images/Bar/Account.png" Width="45" />
+                    <TextBlock FontFamily="Microsoft YaHei"  Text="帐号绑定" FontSize="40" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal" Tapped="Setting_Tapped" >
-                    <Image  Margin="40,-5,0,0" Source="/Images/Bar/Settings.png" Width="45" />
-                    <TextBlock   Text="其它选项"  FontSize="40" VerticalAlignment="Center"/>
+                    <Image  Margin="40,0,5,0" Source="/Images/Bar/Settings.png" Width="45" />
+                    <TextBlock   FontFamily="Microsoft YaHei"  Text="其它选项"  FontSize="40" VerticalAlignment="Center"/>
                 </StackPanel>               
             </StackPanel>
         </AppBar>
@@ -175,11 +178,15 @@
     <Page.BottomAppBar>
         <AppBar  x:Name="bottomAppBar" Background="#ffd77c29" Height="80" BorderBrush="#ffd77c29">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
-                <StackPanel Tapped="Refresh_Tapped" >
-                    <Image Margin="0,3,0,0" Source="/Images/Bar/Refresh.png" Width="45" />
-                    <TextBlock Margin="0,3,0,0"  Text="刷新" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <StackPanel Tapped="Write_Tapped" >
+                    <Image Margin="0,3,0,0" Source="/Images/Bar/Write.png" Width="45" />
+                    <TextBlock FontFamily="Microsoft YaHei"  Margin="0,3,0,0"  Text="发表" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
-              
+                
+                <StackPanel Margin="15,0,0,0"  Tapped="Refresh_Tapped" >
+                    <Image Margin="0,3,0,0" Source="/Images/Bar/Refresh.png" Width="45" />
+                    <TextBlock FontFamily="Microsoft YaHei"  Margin="0,3,0,0"  Text="刷新" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
         </AppBar>
     </Page.BottomAppBar>

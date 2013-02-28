@@ -39,12 +39,12 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>            
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：活跃时段" Style="{StaticResource PageHeaderTextStyle}"/>
+            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock  FontFamily="Microsoft YaHei" x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：活跃时段" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
 
-        <StackPanel Grid.Row="1" Margin="120,20,0,6" Orientation="Horizontal">            
-            <Grid  Width="600" Height="500" x:Name="ControlPanel"   Grid.Column="0">               
+        <StackPanel Grid.Row="1" Margin="120,20,0,6" Orientation="Horizontal">
+            <Grid  Width="{Binding ControlWidth}" Height="{Binding ControlHeight}" x:Name="ControlPanel"   Grid.Column="0">               
             </Grid>           
             
             <StackPanel  VerticalAlignment="Bottom" Margin="20,0,0,0">
@@ -53,38 +53,38 @@
                     <Border Background="Green" Width="60" Height="60" CornerRadius="3" >
                         <Grid>
                             <Image  Source="/Images/Thumb/DefaultAvatar.png"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                            <Image  Source="{Binding AvatarSource}"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            <Image  Source="{Binding AvatarSource}" Stretch="UniformToFill" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
                         </Grid>
                     </Border>
-                    <TextBlock Text="{Binding Name}" Margin="10,0,0,0"  FontSize="35"  Foreground="Green" VerticalAlignment="Bottom"/>
+                    <TextBlock  FontFamily="Microsoft YaHei" Text="{Binding Name}" Margin="10,0,0,0"  FontSize="35"  Foreground="Green" VerticalAlignment="Bottom"/>
                 </StackPanel>
                 <!--第二行，内容和转发-->
                 <StackPanel Orientation="Horizontal">
                     <StackPanel>
                         <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text=" 8:00  - 12:00 :"  Foreground="Green" />
-                            <TextBlock FontSize="25" Text="{Binding Param1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
-                            <TextBlock FontSize="25" Text="次" Foreground="#FFE38C3F"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text=" 8:00  - 12:00 :"  Foreground="Green" />
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Param1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="次" Foreground="#FFE38C3F"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text="12:00 - 18:00 :"  Foreground="Green"/>
-                            <TextBlock FontSize="25" Text="{Binding Param2}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
-                            <TextBlock FontSize="25" Text="次" Foreground="#FFE38C3F"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="12:00 - 18:00 :"  Foreground="Green"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Param2}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="次" Foreground="#FFE38C3F"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text="18:00 - 23:00 :"  Foreground="Green"/>
-                            <TextBlock FontSize="25" Text="{Binding Param3}" Foreground="#FFE38C3F" Margin="20,0,0,0" />
-                            <TextBlock FontSize="25" Text="次" Foreground="#FFE38C3F"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="18:00 - 23:00 :"  Foreground="Green"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Param3}" Foreground="#FFE38C3F" Margin="20,0,0,0" />
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="次" Foreground="#FFE38C3F"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text="00:00 -   8:00 :"  Foreground="Green"/>
-                            <TextBlock FontSize="25" Text="{Binding Param4}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
-                            <TextBlock FontSize="25" Text="次" Foreground="#FFE38C3F"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="00:00 -   8:00 :"  Foreground="Green"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Param4}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="次" Foreground="#FFE38C3F"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="150,0,0,0" VerticalAlignment="Bottom" Orientation="Horizontal" Tapped="Share_Tapped">
                         <Image   Width="35" Height="35"  Source="/Images/Thumb/Share.png" VerticalAlignment="Bottom"></Image>
-                        <TextBlock Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom"></TextBlock>
+                        <TextBlock  FontFamily="Microsoft YaHei" Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom"></TextBlock>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

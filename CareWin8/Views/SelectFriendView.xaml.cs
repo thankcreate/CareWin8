@@ -65,6 +65,14 @@ namespace CareWin8
             {
                 InitialLoadSinaWeibo();                
             }
+            else if (m_entryType == EntryType.Renren)
+            {
+                InitialLoadRenren();                
+            }
+            else if (m_entryType == EntryType.Douban)
+            {
+                InitialLoadDouban();
+            }
         }
 
         private async void InitialLoadSinaWeibo()
@@ -83,7 +91,50 @@ namespace CareWin8
                     }
                 }
             }
-            // TODO     
+            foreach (FriendViewModel model in AllFriendList)
+            {
+                FriendListInShow.Add(model);
+            }
+        }
+
+        private async void InitialLoadRenren()
+        {
+            FriendListInShow.Clear();
+            AllFriendList.Clear();
+            RenrenSDK.GetAllFriendsResponse response = await App.RenrenAPI.FriendsAPI.GetAllFriends();
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.UserList != null)
+            {
+                foreach (RenrenSDK.GetFriendsUser user in response.UserList)
+                {
+                    FriendViewModel model = RenrenConverter.ConvertUserToFriendViewModel(user);
+                    if (model != null)
+                    {
+                        AllFriendList.Add(model);
+                    }
+                }
+            }
+            foreach (FriendViewModel model in AllFriendList)
+            {                
+                FriendListInShow.Add(model);
+            }
+        }
+
+        private async void InitialLoadDouban()
+        {
+            FriendListInShow.Clear();
+            AllFriendList.Clear();
+            DoubanSDK.GetAllFriendsResponse response = await App.DoubanAPI.UserAPI.GetAllFriends(m_myID);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.ListFriends != null)
+            {
+                foreach (DoubanSDK.GetFriendsUser user in response.ListFriends)
+                {
+                    FriendViewModel model = DoubanConverter.ConvertUserToFriendViewModel(user);
+                    if (model != null)
+                    {
+                        AllFriendList.Add(model);
+                    }
+                }
+            }  
             foreach (FriendViewModel model in AllFriendList)
             {
                 FriendListInShow.Add(model);
@@ -113,7 +164,60 @@ namespace CareWin8
         {
         }
 
-        private void Search_Click(object sender, RoutedEventArgs e)
+        private void FriendsGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = FriendsGridView.SelectedIndex;
+            if (index == -1)
+            {
+                MessageDialog dlg = new MessageDialog("未选中");
+                dlg.ShowAsync();
+            }
+            else
+            {
+                if (m_entryType == EntryType.SinaWeibo)
+                {
+                    FriendViewModel friend = FriendListInShow[index];
+                    String oldFollowerID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
+                    if (String.IsNullOrEmpty(oldFollowerID) || oldFollowerID != friend.ID)
+                        App.MainViewModel.IsChanged = true;
+                    PreferenceHelper.SetPreference("SinaWeibo_FollowerID", friend.ID);
+                    PreferenceHelper.SetPreference("SinaWeibo_FollowerNickName", friend.Name);
+                    PreferenceHelper.SetPreference("SinaWeibo_FollowerAvatar", friend.Avatar);
+                    PreferenceHelper.SetPreference("SinaWeibo_FollowerAvatar2", friend.Avatar2);
+                }
+                else if (m_entryType == EntryType.Renren)
+                {
+                    FriendViewModel friend = FriendListInShow[index];
+                    String oldFollowerID = PreferenceHelper.GetPreference("Renren_FollowerID");
+                    if (String.IsNullOrEmpty(oldFollowerID) || oldFollowerID != friend.ID)
+                        App.MainViewModel.IsChanged = true;
+                    PreferenceHelper.SetPreference("Renren_FollowerID", friend.ID);
+                    PreferenceHelper.SetPreference("Renren_FollowerNickName", friend.Name);
+                    PreferenceHelper.SetPreference("Renren_FollowerAvatar", friend.Avatar);
+                    PreferenceHelper.SetPreference("Renren_FollowerAvatar2", friend.Avatar2);
+                }
+                else if (m_entryType == EntryType.Douban)
+                {
+                    FriendViewModel friend = FriendListInShow[index];
+                    String oldFollowerID = PreferenceHelper.GetPreference("Douban_FollowerID");
+                    if (String.IsNullOrEmpty(oldFollowerID) || oldFollowerID != friend.ID)
+                        App.MainViewModel.IsChanged = true;
+                    PreferenceHelper.SetPreference("Douban_FollowerID", friend.ID);
+                    PreferenceHelper.SetPreference("Douban_FollowerNickName", friend.Name);
+                    PreferenceHelper.SetPreference("Douban_FollowerAvatar", friend.Avatar);
+                    PreferenceHelper.SetPreference("Douban_FollowerAvatar2", friend.Avatar2);
+                }
+             
+                Frame.GoBack();
+            }
+        }
+
+        private void Search_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            InnerSearch();
+        }
+
+        private void InnerSearch()
         {
             if (String.IsNullOrEmpty(txtSearch.Text))
                 return;
@@ -140,49 +244,11 @@ namespace CareWin8
             }
         }
 
-        private void Confirm_Click(object sender, RoutedEventArgs e)
+        private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            int index = FriendsGridView.SelectedIndex;
-            if (index == -1)
+            if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                MessageDialog dlg = new MessageDialog("未选中");
-                dlg.ShowAsync();
-            }
-            else
-            {
-                FriendViewModel friend = FriendListInShow[index];
-                String oldFollowerID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
-                if (!String.IsNullOrEmpty(oldFollowerID) && oldFollowerID == friend.ID)
-                    App.MainViewModel.IsChanged = false;
-                else
-                    App.MainViewModel.IsChanged = true;
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerID", friend.ID);
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerNickName", friend.Name);
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerAvatar", friend.Avatar);
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerAvatar2", friend.Avatar2);
-                Frame.GoBack();
-            }
-        }
-
-        private void FriendsGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            int index = FriendsGridView.SelectedIndex;
-            if (index == -1)
-            {
-                MessageDialog dlg = new MessageDialog("未选中");
-                dlg.ShowAsync();
-            }
-            else
-            {
-                FriendViewModel friend = FriendListInShow[index];
-                String oldFollowerID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
-                if (String.IsNullOrEmpty(oldFollowerID) || oldFollowerID != friend.ID)
-                    App.MainViewModel.IsChanged = true;
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerID", friend.ID);
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerNickName", friend.Name);
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerAvatar", friend.Avatar);
-                PreferenceHelper.SetPreference("SinaWeibo_FollowerAvatar2", friend.Avatar2);
-                Frame.GoBack();
+                InnerSearch();
             }
         }        
     }

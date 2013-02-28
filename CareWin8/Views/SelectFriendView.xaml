@@ -17,52 +17,51 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+      
+            
+        <GridView Grid.RowSpan="3"  IncrementalLoadingTrigger="Edge"  IncrementalLoadingThreshold="0"  Padding="100,190,0,50"   x:Name="FriendsGridView" ItemsSource="{Binding FriendListInShow}" 
+                    SelectionMode="Single" SelectionChanged="FriendsGridView_SelectionChanged">
+            <GridView.ItemTemplate>
+                <DataTemplate>                      
+                    <Border Padding="0,0,0,5"  Width="270" Height="150"  Background="White" Opacity="0.9" BorderThickness="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Margin="10,10,0,0"  Width="50" Height="50"  Source="{Binding Avatar}" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                            <StackPanel Margin="10,10,5,0" Grid.Column="1">
+                                <TextBlock FontFamily="Microsoft YaHei"  FontSize="25" TextWrapping="Wrap"  Foreground="Black" Text="{Binding Name}"/>
+                                <TextBlock FontFamily="Microsoft YaHei"  FontSize="16"  Foreground="Black" TextWrapping="Wrap" Text="{Binding Description}" />
+                            </StackPanel>
+                        </Grid>                            
+                    </Border>                        
+                </DataTemplate>
+            </GridView.ItemTemplate>             
+        </GridView>
+
         <!-- Back button and page title -->
-        <Grid>
+        <Grid Width="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="指定关注人" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock  FontFamily="Microsoft YaHei" x:Name="pageTitle" Grid.Column="1" Text="指定关注人" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock  Margin="100,0,0,0" FontSize="30"  Text="搜索" VerticalAlignment="Bottom"/>
-                <TextBox x:Name="txtSearch"  Width="300" Height="30"  HorizontalAlignment="Left" Margin="20,0,0,0"/>
-                <Button Content="搜索" FontSize="20"  Height="40" Width="100" Click="Search_Click" ></Button>
-            </StackPanel>
-            <GridView Margin="0,20,0,0"  IncrementalLoadingTrigger="Edge"  IncrementalLoadingThreshold="0"  Padding="100,0,0,0"  Grid.Row="1"  x:Name="FriendsGridView" ItemsSource="{Binding FriendListInShow}" 
-                      SelectionMode="Single" SelectionChanged="FriendsGridView_SelectionChanged">
-                <GridView.ItemTemplate>
-                    <DataTemplate>                      
-                        <Border Padding="0,0,0,5"  Width="270" Height="150"  Background="White" Opacity="0.9" BorderThickness="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Margin="10,10,0,0"  Width="50" Height="50"  Source="{Binding Avatar}" VerticalAlignment="Top" HorizontalAlignment="Left" />
-                                <StackPanel Margin="10,10,5,0" Grid.Column="1">
-                                    <TextBlock FontSize="25" TextWrapping="Wrap"  Foreground="Black" Text="{Binding Name}"/>
-                                    <TextBlock FontSize="16"  Foreground="Black" TextWrapping="Wrap" Text="{Binding Description}" />
-                                </StackPanel>
-                            </Grid>                            
-                        </Border>                        
-                    </DataTemplate>
-                </GridView.ItemTemplate>             
-            </GridView>
-            <Button Grid.Row="2" Margin="0,15,0,20"  Content="确定" Foreground="White" FontSize="20" Height="40" Width="100"  HorizontalAlignment="Center" Click="Confirm_Click"></Button>
-        </Grid>        
-        
+
+        <StackPanel Grid.Row="1"  Orientation="Horizontal" Width="Auto">
+            <TextBlock  FontFamily="Microsoft YaHei"  Margin="100,0,0,0" FontSize="30"  Text="搜索" VerticalAlignment="Bottom"/>
+            <TextBox  FontFamily="Microsoft YaHei" x:Name="txtSearch"  Width="300" Height="30"  HorizontalAlignment="Left" Margin="20,0,0,0" KeyDown="TextBox_KeyDown"/>
+            <Border Width="60" Height="32" Margin="0,-1,0,0"  Background="Orange" Tapped="Search_Tapped" >
+                <Image Width="22" Height="22" Source="/Images/Thumb/Find.png"  />
+            </Border>
+        </StackPanel>
+
 
         <VisualStateManager.VisualStateGroups>
 

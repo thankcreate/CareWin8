@@ -26,9 +26,12 @@ namespace CareWin8
             Interlocked.Increment(ref m_nTaskInProcess);
             // 如果是第一个任务，作更新加载条的操作
             if (m_nTaskInProcess == 1)
-            {                
-                m_progressBar.ShowPaused = false;
-                m_progressBar.IsEnabled= true;                
+            {
+                MainPage.UIDispater.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    m_progressBar.ShowPaused = false;
+                    m_progressBar.IsEnabled = true;
+                });            
                 //m_progressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
          
@@ -51,12 +54,13 @@ namespace CareWin8
             Interlocked.Decrement(ref m_nTaskInProcess);
             // 写你妹注释！
             if (m_nTaskInProcess == 0)
-            {                
-                //m_progressBar.IsIndeterminate = false;
-                m_progressBar.ShowPaused = true;
-                //m_progressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                if (m_delAllTaskCompleCallback != null)
-                    m_delAllTaskCompleCallback.Invoke();
+            {
+                MainPage.UIDispater.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    m_progressBar.ShowPaused = true;
+                    if (m_delAllTaskCompleCallback != null)
+                        m_delAllTaskCompleCallback.Invoke();
+                });
             }
            
         }

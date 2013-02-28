@@ -23,8 +23,6 @@ namespace CareWin8
         public static Boolean SetPreference(String key, String value)
         {
             settings.Values[key] = value;            
-            // TODO
-            // Filt(key, value);
             return true;
         }
         public static void RemovePreference(String key)
@@ -33,8 +31,6 @@ namespace CareWin8
             {
                 settings.Values.Remove(key);
             }
-            // TODO
-            // Filt(key, null);
         }
 
         public static void SavePreference()
@@ -104,6 +100,14 @@ namespace CareWin8
             RemovePreference("Douban_Avatar");
             RemovePreference("Douban_FollowerAvatar");
             RemovePreference("Douban_FollowerAvatar2");
+        }
+
+        public static void RemoveDoubanLoginAccountPreference()
+        {
+            RemovePreference("Douban_NickName");
+            RemovePreference("Douban_ID");
+            RemovePreference("Douban_Token");
+            RemovePreference("Douban_Avatar");
         }
     }
 }

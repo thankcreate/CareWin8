@@ -17,6 +17,7 @@ namespace CareWin8
             model.Title = comment.user.name;
             model.IconURL = comment.user.profile_image_url;
             model.ID = comment.id;
+            model.UID = comment.user.id;
             model.TimeObject = string.IsNullOrEmpty(comment.created_at) ? new DateTimeOffset() : ExtHelpers.GetSinaTimeFullObject(comment.created_at);
             model.Type = EntryType.SinaWeibo;
             return model;
@@ -40,7 +41,6 @@ namespace CareWin8
         {
             try
             {
-                // TODO
                 FiltPicture(status);
                 ItemViewModel model = new ItemViewModel();
                 model.IconURL = status.user.profile_image_url;

@@ -57,17 +57,6 @@ namespace CareWin8
         {
         }        
 
-        private void Search_Click(object sender, RoutedEventArgs e)
-        {
-            String key = txtSearch.Text;
-            if (String.IsNullOrEmpty(key))
-            {
-                DialogHelper.ShowMessageDialog("输入为空是想闹哪样啊~");
-                return;
-            }
-            SearchByKey(key);
-        }
-
         private async void SearchByKey(String key)
         {
             if (m_progressBarHelper == null)
@@ -135,6 +124,30 @@ namespace CareWin8
             PreferenceHelper.SavePreference();            
             App.MainViewModel.IsChanged = true;
             Frame.GoBack();
+        }
+
+        private void Search_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            InnerSearch();
+        }
+
+        private void InnerSearch()
+        {
+            String key = txtSearch.Text;
+            if (String.IsNullOrEmpty(key))
+            {
+                DialogHelper.ShowMessageDialog("输入为空是想闹哪样啊~");
+                return;
+            }
+            SearchByKey(key);
+        }
+
+        private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                InnerSearch();
+            }
         }
     }
 }

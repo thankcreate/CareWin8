@@ -87,10 +87,42 @@ namespace CareWin8
             set { SetValue(Param4Property, value); }
         }
         #endregion
-        
+
+        #region ControlWidthProperty
+        public static readonly DependencyProperty ControlWidthProperty =
+            DependencyProperty.Register("ControlWidth", typeof(String), typeof(TimeSpanControl), new PropertyMetadata("600"));
+
+        public String ControlWidth
+        {
+            get { return (String)GetValue(ControlWidthProperty); }
+            set { SetValue(ControlWidthProperty, value); }
+        }
+        #endregion
+
+
+        #region ControlHeightProperty
+        public static readonly DependencyProperty ControlHeightProperty =
+            DependencyProperty.Register("ControlHeight", typeof(String), typeof(TimeSpanControl), new PropertyMetadata("500"));
+
+        public String ControlHeight
+        {
+            get { return (String)GetValue(ControlHeightProperty); }
+            set { SetValue(ControlHeightProperty, value); }
+        }
+        #endregion
+
         public TimeSpanView()
         {
             this.InitializeComponent();
+            InitControlSize();
+        }
+
+        private void InitControlSize()
+        {
+            int height = (int) ( ((double)500) / (768 - 160) * (Window.Current.Bounds.Height - 160) );
+            int width = (int)(((double)600) / (1366 - 120) * (Window.Current.Bounds.Width - 120));
+            ControlWidth = width.ToString();
+            ControlHeight = height.ToString();
         }
 
         /// <summary>
@@ -106,13 +138,27 @@ namespace CareWin8
         {
             Name = MiscTool.GetHerName();
             AvatarSource = MiscTool.GetHerIconUrl();
-            GetData();
+            bool result = GetData();
+            if (!result)
+                return;
             ControlPanel.Children.Clear();
-            ControlPanel.Children.Add(new TimeSpanControl(Param1, Param2, Param3, Param4));    
+            ControlPanel.Children.Add(new TimeSpanControl(Param1, Param2, Param3, Param4));                            
         }
 
-        private void GetData()
+        private bool GetData()
         {
+            String myName = MiscTool.GetMyName();
+            if (String.IsNullOrEmpty(myName))
+            {
+                DialogHelper.ShowMessageDialog("请至少先登陆一个帐户");
+                return false;
+            }
+            String herName = MiscTool.GetHerName();
+            if (String.IsNullOrEmpty(herName))
+            {
+                DialogHelper.ShowMessageDialog("请至少先关注她/他的一个帐户");
+                return false;
+            }
             foreach (ItemViewModel item in App.MainViewModel.Items)
             {
                 int hour = item.TimeObject.Hour;
@@ -133,6 +179,7 @@ namespace CareWin8
                     Param4++;
                 }                     
             }
+            return true;
         }       
 
         /// <summary>
@@ -171,7 +218,15 @@ namespace CareWin8
             if (type == EntryType.SinaWeibo)
             {
                 Share_SinaWeibo();
+            } 
+            else if (type == EntryType.Renren)
+            {
+                Share_Renren();
             }
+            else if (type == EntryType.Douban)
+            {
+                Share_Douban();
+            } 
         }
 
         private void Share_SinaWeibo()
@@ -187,6 +242,41 @@ namespace CareWin8
             Dictionary<String, Object> parameters = new Dictionary<String, Object>();
             parameters.Add("Content", sentence.ToString());
             parameters.Add("Type", EntryType.SinaWeibo);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        // 之所以要把不同的平台的分享分开写
+        // 主要是因为人人在@人的时候要带上ID，并且各个平台的用户名也不一样
+        private void Share_Renren()
+        {
+            StringBuilder sentence = new StringBuilder();
+            String hername = PreferenceHelper.GetPreference("Renren_FollowerNickName");
+            String herID = PreferenceHelper.GetPreference("Renren_FollowerID");
+            String time = GenerateMostActiveTime();
+            int percentage = GenerateMostActivePercentage();
+            String award = GenerateAward();
+            sentence.Append(string.Format(
+                "据消息人士透露，@{0}({1}) 最活跃的时间是在{2}，此段时间中的发贴量占全部发贴的{3}%, 获得了成就【{4}】",
+                 hername,herID, time, percentage, award));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Renren);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void Share_Douban()
+        {
+            StringBuilder sentence = new StringBuilder();
+            String hername = PreferenceHelper.GetPreference("Douban_FollowerNickName");
+            String time = GenerateMostActiveTime();
+            int percentage = GenerateMostActivePercentage();
+            String award = GenerateAward();
+            sentence.Append(string.Format(
+                "据消息人士透露，@{0} 最活跃的时间是在{1}，此段时间中的发贴量占全部发贴的{2}%, 获得了成就【{3}】",
+                 hername, time, percentage, award));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Douban);
             Frame.Navigate(typeof(AddCommitView), parameters);
         }
 

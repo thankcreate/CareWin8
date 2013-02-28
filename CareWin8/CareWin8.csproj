@@ -12,7 +12,9 @@
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>CareWin8_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>CareWin8_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>5575746510EEB95FE2DE90FD840B46C9F669341D</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -100,12 +102,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <SDKReference Include="Visifire for Windows 8, Version=2.0.0.1">
-      <Name>Visifire for Windows 8</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -115,11 +111,18 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="MyControl\FullImageControl.xaml.cs">
+      <DependentUpon>FullImageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyControl\HubTile\HubTile.cs" />
     <Compile Include="MyControl\HubTile\HubTileService.cs" />
     <Compile Include="MyControl\HubTile\ImageState.cs" />
     <Compile Include="MyControl\HubTile\MultipleToSingleLineStringConverter.cs" />
     <Compile Include="MyControl\HubTile\VisibilityConverter.cs" />
+    <Compile Include="MyControl\Login\DoubanLoginControl.xaml.cs">
+      <DependentUpon>DoubanLoginControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\PicGridView.cs" />
     <Compile Include="MyControl\PopControl.xaml.cs">
       <DependentUpon>PopControl.xaml</DependentUpon>
     </Compile>
@@ -144,10 +147,16 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MyControl\Template\ImageInFlip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\Converter\DoubanConverter.cs" />
+    <Compile Include="Tool\Converter\RenrenConverter.cs" />
     <Compile Include="Tool\Converter\RSSFeedConverter.cs" />
     <Compile Include="Tool\Converter\SinaWeiboConverter.cs" />
     <Compile Include="Tool\DataTemplateSelector\HomePageStatusDataTemplateSelector.cs" />
+    <Compile Include="Tool\Fetcher\DoubanFetcher.cs" />
+    <Compile Include="Tool\Fetcher\RenrenFetcher.cs" />
+    <Compile Include="Tool\Misc\CareConstDefine.cs" />
     <Compile Include="Tool\UI\DialogHelper.cs" />
     <Compile Include="Tool\Misc\ExtHelpers.cs" />
     <Compile Include="Tool\Fetcher\BaseFetcher.cs" />
@@ -175,6 +184,12 @@
     </Compile>
     <Compile Include="Views\AddCommitView.xaml.cs">
       <DependentUpon>AddCommitView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GuideView.xaml.cs">
+      <DependentUpon>GuideView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Lab\CatView.xaml.cs">
+      <DependentUpon>CatView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Lab\CharactorAnalysisControl.xaml.cs">
       <DependentUpon>CharactorAnalysisControl.xaml</DependentUpon>
@@ -226,6 +241,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="CareWin8_StoreKey.pfx" />
     <None Include="CareWin8_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -238,7 +254,6 @@
     <Content Include="Common\ReadMe.txt" />
     <Content Include="Dll\Win8Visifire.Charts.dll" />
     <Content Include="Dll\Win8Visifire.Gauges.dll" />
-    <Content Include="Images\Background\Day_rainbow.png" />
     <Content Include="Images\Background\Day.png" />
     <Content Include="Images\Background\Detail.png" />
     <Content Include="Images\Background\Item.png" />
@@ -247,6 +262,12 @@
     <Content Include="Images\Bar\Refresh.png" />
     <Content Include="Images\Bar\Send.png" />
     <Content Include="Images\Bar\Settings.png" />
+    <Content Include="Images\Bar\Write.png" />
+    <Content Include="Images\Guide\gd1.jpg" />
+    <Content Include="Images\Guide\gd2.jpg" />
+    <Content Include="Images\Guide\gd3.jpg" />
+    <Content Include="Images\Guide\gd4.JPG" />
+    <Content Include="Images\Guide\gdlast.JPG" />
     <Content Include="Images\Lab\Alarm.png" />
     <Content Include="Images\Lab\BarChart.png" />
     <Content Include="Images\Lab\Cat.png" />
@@ -256,20 +277,26 @@
     <Content Include="Images\Logo\renren_logo.png" />
     <Content Include="Images\Logo\rss_logo.png" />
     <Content Include="Images\Logo\sinaweibo_logo.png" />
+    <Content Include="Images\Logo\sinaweibo_logo_red.png" />
     <Content Include="Images\Thumb\AddMessage.png" />
     <Content Include="Images\Thumb\Arrow.png" />
     <Content Include="Images\Thumb\DefaultAvatar.png" />
+    <Content Include="Images\Thumb\Find.png" />
     <Content Include="Images\Thumb\Go.png" />
     <Content Include="Images\Thumb\Heart_transparent.png" />
     <Content Include="Images\Thumb\IE.png" />
     <Content Include="Images\Thumb\Menu.PNG" />
+    <Content Include="Images\Thumb\Picture.png" />
     <Content Include="Images\Thumb\Refresh.png" />
     <Content Include="Images\Thumb\Refresh_skyblue.png" />
+    <Content Include="Images\Thumb\Save.png" />
     <Content Include="Images\Thumb\Share.png" />
+    <Content Include="Images\Thumb\WriteCommentBack.png" />
     <Content Include="Images\Tile\default1.jpg" />
     <Content Include="Images\Tile\default2.jpg" />
     <Content Include="Images\Tile\default3.jpg" />
     <Content Include="Images\Tile\default4.jpg" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -279,6 +306,14 @@
     <Page Include="Common\StandardStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControl\FullImageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\Login\DoubanLoginControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControl\PopControl.xaml">
       <SubType>Designer</SubType>
@@ -325,6 +360,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddCommitView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GuideView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Lab\CatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,6 +433,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DoubanSDK\DoubanSDK.csproj">
+      <Project>{c0c8d6f0-05f2-423b-b73d-a34d7f39cc98}</Project>
+      <Name>DoubanSDK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RenrenSDK\RenrenSDK.csproj">
       <Project>{8ea52f51-8f95-45d0-bd74-2dfe93cbbae3}</Project>
       <Name>RenrenSDK</Name>
@@ -407,6 +454,11 @@
     <Reference Include="NotificationsExtensions">
       <HintPath>Dll\NotificationsExtensions.winmd</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Visifire for Windows 8, Version=2.0.1.0">
+      <Name>Visifire for Windows 8</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

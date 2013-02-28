@@ -78,6 +78,28 @@ namespace CareWin8
         }
         #endregion
 
+        #region ControlWidthProperty
+        public static readonly DependencyProperty ControlWidthProperty =
+            DependencyProperty.Register("ControlWidth", typeof(String), typeof(LovePercentageView), new PropertyMetadata("600"));
+
+        public String ControlWidth
+        {
+            get { return (String)GetValue(ControlWidthProperty); }
+            set { SetValue(ControlWidthProperty, value); }
+        }
+        #endregion
+
+        #region ControlHeightProperty
+        public static readonly DependencyProperty ControlHeightProperty =
+            DependencyProperty.Register("ControlHeight", typeof(String), typeof(LovePercentageView), new PropertyMetadata("500"));
+
+        public String ControlHeight
+        {
+            get { return (String)GetValue(ControlHeightProperty); }
+            set { SetValue(ControlHeightProperty, value); }
+        }
+        #endregion
+
         int m_percentage = 50;
         string m_myName = "";
         string m_herName = "";
@@ -85,6 +107,15 @@ namespace CareWin8
         public LovePercentageView()
         {
             this.InitializeComponent();
+            InitControlSize();
+        }
+
+        private void InitControlSize()
+        {
+            int height = (int)(((double)500) / (768 - 160) * (Window.Current.Bounds.Height - 160));
+            int width = (int)(((double)600) / (1366 - 120) * (Window.Current.Bounds.Width - 120));
+            ControlWidth = width.ToString();
+            ControlHeight = height.ToString();
         }
 
         /// <summary>
@@ -178,6 +209,14 @@ namespace CareWin8
             {
                 Share_SinaWeibo();
             }
+            else if (type == EntryType.Renren)
+            {
+                Share_Renren();
+            }
+            else if (type == EntryType.Douban)
+            {
+                Share_Douban();
+            }  
         }
 
         private void Share_SinaWeibo()
@@ -186,11 +225,41 @@ namespace CareWin8
             String myName = PreferenceHelper.GetPreference("SinaWeibo_NickName");
             String herName = PreferenceHelper.GetPreference("SinaWeibo_FollowerNickName");
             sentence.Append(string.Format(
-                   "经某不靠谱的分析仪测算，@{0} 与@{1} 的姻缘指数达到惊人的{2}。去死去死团众，不管你们信不信，我反正不信了",
+                   "经某不靠谱的分析仪测算，@{0} 与 @{1} 的姻缘指数达到惊人的{2}。去死去死团众，不管你们信不信，我反正不信了",
                     myName, herName, m_percentage));
             Dictionary<String, Object> parameters = new Dictionary<String, Object>();
             parameters.Add("Content", sentence.ToString());
             parameters.Add("Type", EntryType.SinaWeibo);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void Share_Renren()
+        {
+            StringBuilder sentence = new StringBuilder();
+            String myName = PreferenceHelper.GetPreference("Renren_NickName");
+            String myID = PreferenceHelper.GetPreference("Renren_ID");
+            String herName = PreferenceHelper.GetPreference("Renren_FollowerNickName");
+            String herID = PreferenceHelper.GetPreference("Renren_FollowerID");
+            sentence.Append(string.Format(
+                   "经某不靠谱的分析仪测算，@{0}({1}) 与@{2}({3}) 的姻缘指数达到惊人的{4}。去死去死团众，不管你们信不信，我反正不信了",
+                    myName, myID, herName, herID, m_percentage));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Renren);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void Share_Douban()
+        {
+            StringBuilder sentence = new StringBuilder();
+            String myName = PreferenceHelper.GetPreference("Douban_NickName");
+            String herName = PreferenceHelper.GetPreference("Douban_FollowerNickName");
+            sentence.Append(string.Format(
+                   "经某不靠谱的分析仪测算，@{0} 与@{1} 的姻缘指数达到惊人的{2}。去死去死团众，不管你们信不信，我反正不信了",
+                    myName, herName, m_percentage));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Douban);
             Frame.Navigate(typeof(AddCommitView), parameters);
         }
     }

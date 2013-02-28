@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+using CareWin8.MyControl;
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234237 上有介绍
 
 namespace CareWin8
@@ -31,6 +31,9 @@ namespace CareWin8
             set { SetValue(ItemHeightProperty, value); }
         }
         #endregion
+
+
+        ProgressBarHelper m_progressBarHelper;
 
         public StatusTimelineView()
         {
@@ -92,6 +95,138 @@ namespace CareWin8
             catch (System.Exception ex)
             {
             	
+            }
+        }
+
+        private void ContentImage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameworkElement image = sender as FrameworkElement;
+            if (image == null)
+                return;
+            ItemViewModel model = image.DataContext as ItemViewModel;
+            if (model == null)
+                return;
+            String fullURL = model.FullImageURL;
+            FullImageControl control = new FullImageControl(fullURL);
+            control.ShowPop();
+            e.Handled = true;
+        }
+
+        private void Item_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                FrameworkElement control = sender as FrameworkElement;
+                if (control == null)
+                    return;
+                ItemViewModel model = control.DataContext as ItemViewModel;
+                if (model == null)
+                    return;
+
+                if (model.Type == EntryType.Rss)
+                {
+                    Frame.Navigate(typeof(RssDetailView), model);
+                }
+                else if (model.Type == EntryType.SinaWeibo ||
+                model.Type == EntryType.Renren ||
+                model.Type == EntryType.Douban)
+                {
+                    Frame.Navigate(typeof(StatusDetailView), model);
+                }   
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }
+                     
+        }
+
+        private void Forward_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameworkElement image = sender as FrameworkElement;
+            if (image == null)
+                return;
+            ItemViewModel model = image.DataContext as ItemViewModel;
+            if (model == null)
+                return;
+            if (model.ForwardItem == null)
+                return;
+            String fullURL = model.ForwardItem.FullImageURL;
+
+            FullImageControl control = new FullImageControl( fullURL);
+            control.ShowPop();
+            e.Handled = true;
+        }
+
+        private void Account_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            bottomAppBar.IsOpen = false;
+            Frame.Navigate(typeof(AccountView));
+        }
+
+        private void Setting_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            bottomAppBar.IsOpen = false;
+            MyControl.PreferenceSettingControl control = new MyControl.PreferenceSettingControl();
+            control.Show();
+        }
+
+        private void Refresh_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            bottomAppBar.IsOpen = false;
+            if (m_progressBarHelper == null)
+            {
+                m_progressBarHelper = new ProgressBarHelper(MainProgessBar, RefreshViewerHelper.RefreshViewItems);
+            }
+            RefreshViewerHelper.RefreshMainViewModel(m_progressBarHelper);
+        }
+
+        private void Write_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            bottomAppBar.IsOpen = false;
+            MyControl.PopControl pc = new MyControl.PopControl();
+            MyControl.SelectPublicSourceControl control = new MyControl.SelectPublicSourceControl(pc);
+            control.ChooseAction = ChooseActionCallback;
+            pc.SetCustomContent(control);
+            pc.ShowPop();
+        }
+
+        private void ChooseActionCallback(EntryType type)
+        {
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", "");
+
+            if (type == EntryType.SinaWeibo)
+            {
+                parameters.Add("Type", EntryType.SinaWeibo);
+                Frame.Navigate(typeof(AddCommitView), parameters);
+            }
+            else if (type == EntryType.Renren)
+            {
+                parameters.Add("Type", EntryType.Renren);
+                Frame.Navigate(typeof(AddCommitView), parameters);
+            }
+            else if (type == EntryType.Douban)
+            {
+                parameters.Add("Type", EntryType.Douban);
+                Frame.Navigate(typeof(AddCommitView), parameters);
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (App.MainViewModel.IsChanged)
+            {
+                App.MainViewModel.IsChanged = false;
+                if (m_progressBarHelper == null)
+                {
+                    m_progressBarHelper = new ProgressBarHelper(MainProgessBar, RefreshViewerHelper.RefreshViewItems);
+                }
+                RefreshViewerHelper.RefreshMainViewModel(m_progressBarHelper);
             }
         }
     }

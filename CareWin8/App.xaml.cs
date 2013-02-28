@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using SinaWeiboSDK;
+using RenrenSDK;
+using DoubanSDK;
 // “空白应用程序”模板在 http://go.microsoft.com/fwlink/?LinkId=234227 上有介绍
 
 namespace CareWin8
@@ -23,8 +25,10 @@ namespace CareWin8
     /// 提供特定于应用程序的行为，以补充默认的应用程序类。
     /// </summary>
     sealed partial class App : Application
-    {
+    {        
         public static SinaWeiboAPI SinaWeiboAPI = new SinaWeiboAPI();
+        public static RenrenAPI RenrenAPI = new RenrenAPI();
+        public static DoubanAPI DoubanAPI = new DoubanAPI();        
 
         public static MainViewModel MainViewModel = new MainViewModel();
         /// <summary>
@@ -32,43 +36,85 @@ namespace CareWin8
         /// 逻辑上等同于 main() 或 WinMain()。
         /// </summary>
         public App()
-        {           
+        {            
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            this.Suspending += OnSuspending;            
             Init();            
         }
 
+        public static Windows.Storage.Streams.IRandomAccessStreamWithContentType MainPageBackgroundImageStream;
+
         private async void Init()
         {
+            // 加载各平台参数
             SinaWeiboInit();
             RenrenInit();
+            DoubanInit();
+
+            // 之所以这里要初始化背景，是因为背景图有1M，而Metro应用在加载这个
+            // 背景图时非常慢，会出现明显的黑色背景闪烁，所以要提前加载
+            BackgroundInit();
+
+            // 加载本地缓存的新鲜事
+            LocalCacheInit();
+        }
+
+        private async void LocalCacheInit()
+        {
+            // 拿头条新鲜事的缓存
             StorageHelper<ObservableCollection<ItemViewModel>> stHelper =
                 new StorageHelper<ObservableCollection<ItemViewModel>>(StorageType.Local);
             try
             {
                 ObservableCollection<ItemViewModel> result = await stHelper.LoadASync("TopItems");
                 if (result != null)
-                    MainViewModel.TopItems = result;                
+                    MainViewModel.TopItems = result;
             }
             catch (System.Exception ex)
             {
                 MainViewModel.TopItems = new ObservableCollection<ItemViewModel>();
             }
+
+            // 拿图片列表缓存
+            StorageHelper<ObservableCollection<PictureItemViewModel>> stPicHelper =
+                 new StorageHelper<ObservableCollection<PictureItemViewModel>>(StorageType.Local);
+            try
+            {
+                ObservableCollection<PictureItemViewModel> result = await stPicHelper.LoadASync("PicItems");
+                if (result != null)
+                    MainViewModel.PictureItems = result;
+            }
+            catch (System.Exception ex)
+            {
+                MainViewModel.PictureItems = new ObservableCollection<PictureItemViewModel>();
+            }
         }
+
+        private async void BackgroundInit()
+        {
+            // 这是之所以这么纠结，只初始化了一个stream，是因为这里OpenReadAsync只能做异步操作
+            // 异步的下一行是在另一个线程，而在App.cs里还不能通过Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            // 来拿到UI线程的Dispatcher
+            // 目前的UI线程Dispatcher是直到MainPage构造了之后才有的
+            // MainPage构造时拿到这个stream，然后用这个stream去构造他自己的Image
+            Uri imageUri = new Uri(CareConstDefine.MainPageBackgroundURI);                  
+            var rass = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(imageUri);
+            MainPageBackgroundImageStream = await rass.OpenReadAsync();
+        } 
 
         private void SinaWeiboInit()
         {
-            SinaWeiboSDK.SinaWeiboSDKData.AppKey = "466921770";
-            SinaWeiboSDK.SinaWeiboSDKData.AppSecret = "548cb1a27cf896d304a9704e2be0e62e";
-            SinaWeiboSDK.SinaWeiboSDKData.RedirectUri = "http://thankcreate.github.com/Care";
+            SinaWeiboSDK.SinaWeiboSDKData.AppKey = "3467990428";
+            SinaWeiboSDK.SinaWeiboSDKData.AppSecret = "3d475659a06cb313dbdd43eb92eb6d47";
+            SinaWeiboSDK.SinaWeiboSDKData.RedirectUri = "http://api.weibo.com/oauth2/default.html";
         }
 
         private void RenrenInit()
         {
-            RenrenSDK.RenrenSDKData.ID = "214071";
-            RenrenSDK.RenrenSDKData.AppKey = "0b434803c2c7435691bd398eaf44d4fc";
-            RenrenSDK.RenrenSDKData.AppSecret = "172d2ba967924bc9b457983e1dba1127";
-            RenrenSDK.RenrenSDKData.RedirectUri = "http://thankcreate.github.com/Care/";
+            RenrenSDK.RenrenSDKData.ID = "219563";
+            RenrenSDK.RenrenSDKData.AppKey = "19a4cb151cb7400bba75504317f65b4f";
+            RenrenSDK.RenrenSDKData.AppSecret = "df339e16fd074d349b58294b19d175bf";
+            RenrenSDK.RenrenSDKData.RedirectUri = "http://graph.renren.com/oauth/login_success.html";
             List<String> listScope = new List<String>{ 
                 "publish_feed",
                 "publish_blog", 
@@ -81,8 +127,17 @@ namespace CareWin8
                 "publish_comment",
                 "read_user_share",                
                 "create_album", 
+                "status_update",
                 "photo_upload" };
-            RenrenSDK.RenrenSDKData.Scope = String.Join(",", listScope.ToArray());
+            RenrenSDK.RenrenSDKData.Scope = String.Join("+", listScope.ToArray());
+        }
+
+        private void DoubanInit()
+        {
+            DoubanSDK.DoubanSDKData.AppKey = "0bd4507ebf3d18eb237cf17c3db74ac1";
+            DoubanSDK.DoubanSDKData.AppSecret = "8e59243064b1d940";
+            DoubanSDK.DoubanSDKData.RedirectUri = "http://thankcreate.github.com/Care/callback.html";
+            DoubanSDK.DoubanSDKData.Scope = "shuo_basic_r,shuo_basic_w,douban_basic_common";
         }
 
         /// <summary>
@@ -116,7 +171,18 @@ namespace CareWin8
                 // 当未还原导航堆栈时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 参数
-                if (!rootFrame.Navigate(typeof(MainPage), args.Arguments))
+                String testFirst = PreferenceHelper.GetPreference("FirstCome");
+                bool openRes;
+                if (String.IsNullOrEmpty(testFirst))
+                {
+                    PreferenceHelper.SetPreference("FirstCome", "whatever");
+                    openRes = rootFrame.Navigate(typeof(GuideView));
+                }
+                else 
+                {
+                    openRes = rootFrame.Navigate(typeof(MainPage), args.Arguments);
+                }
+                if (!openRes)
                 {
                     throw new Exception("Failed to create initial page");
                 }

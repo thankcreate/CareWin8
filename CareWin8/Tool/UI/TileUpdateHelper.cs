@@ -43,6 +43,8 @@ namespace CareWin8
                 for (int i = 0; i < count; i++)
                 {
                     ItemViewModel item = items[i];
+
+                    // FIXME: 不知道为什么，反正豆瓣的图就是显示不出来
                     String iconURL = MiscTool.GetHerIconByType(item.Type);
                     UpdateTileWideSmallImageAndText04(iconURL, item.Title, item.Content);
                 }
@@ -84,7 +86,7 @@ namespace CareWin8
                 if (items == null)
                     return;
                 int count = items.Count;
-                if (/*count == 0*/true)
+                if (count == 0)
                 {
                     UpdateTileWideImageCollection(herIcon, DEFAULT1, DEFAULT2, DEFAULT3, DEFAULT4);
                 }

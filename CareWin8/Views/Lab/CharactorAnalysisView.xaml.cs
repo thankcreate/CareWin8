@@ -99,7 +99,28 @@ namespace CareWin8
         }
         #endregion
 
+        #region ControlWidthProperty
+        public static readonly DependencyProperty ControlWidthProperty =
+            DependencyProperty.Register("ControlWidth", typeof(String), typeof(CharactorAnalysisView), new PropertyMetadata("600"));
 
+        public String ControlWidth
+        {
+            get { return (String)GetValue(ControlWidthProperty); }
+            set { SetValue(ControlWidthProperty, value); }
+        }
+        #endregion
+
+
+        #region ControlHeightProperty
+        public static readonly DependencyProperty ControlHeightProperty =
+            DependencyProperty.Register("ControlHeight", typeof(String), typeof(CharactorAnalysisView), new PropertyMetadata("500"));
+
+        public String ControlHeight
+        {
+            get { return (String)GetValue(ControlHeightProperty); }
+            set { SetValue(ControlHeightProperty, value); }
+        }
+        #endregion
         string m_myName = "";
         string m_herName = "";
         string m_award = "";
@@ -107,6 +128,15 @@ namespace CareWin8
         public CharactorAnalysisView()
         {
             this.InitializeComponent();
+            InitControlSize();
+        }
+
+        private void InitControlSize()
+        {
+            int height = (int)(((double)500) / (768 - 160) * (Window.Current.Bounds.Height - 160));
+            int width = (int)(((double)600) / (1366 - 120) * (Window.Current.Bounds.Width - 120));
+            ControlWidth = width.ToString();
+            ControlHeight = height.ToString();
         }
 
         /// <summary>
@@ -206,6 +236,14 @@ namespace CareWin8
             {
                 Share_SinaWeibo();
             }
+            else if (type == EntryType.Renren)
+            {
+                Share_Renren();
+            }
+            else if (type == EntryType.Douban)
+            {
+                Share_Douban();
+            }
         }
 
         private void Share_SinaWeibo()
@@ -220,6 +258,36 @@ namespace CareWin8
             Dictionary<String, Object> parameters = new Dictionary<String, Object>();
             parameters.Add("Content", sentence.ToString());
             parameters.Add("Type", EntryType.SinaWeibo);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void Share_Renren()
+        {
+            StringBuilder sentence = new StringBuilder();            
+            String herName = PreferenceHelper.GetPreference("SinaWeibo_FollowerNickName");
+            String herID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
+
+            sentence.Append(string.Format(
+                    "据新一轮民调显示，@{0}({1}) 的萝莉属性为{2}，女王属性为{3}，天然呆属性为{4}，吃货属性为{5}，伪娘属性为{6}，获得了成就【{7}】",
+                     herName, herID, Param1, Param2, Param3, Param4, Param5, m_award));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Renren);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void Share_Douban()
+        {
+            StringBuilder sentence = new StringBuilder();
+            String myName = PreferenceHelper.GetPreference("Douban_NickName");
+            String herName = PreferenceHelper.GetPreference("Douban_FollowerNickName");
+
+            sentence.Append(string.Format(
+                    "据新一轮民调显示，@{0} 的萝莉属性为{1}，女王属性为{2}，天然呆属性为{3}，吃货属性为{4}，伪娘属性为{5}，获得了成就【{6}】",
+                     herName, Param1, Param2, Param3, Param4, Param5, m_award));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Douban);
             Frame.Navigate(typeof(AddCommitView), parameters);
         }
 

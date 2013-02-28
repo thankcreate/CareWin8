@@ -110,6 +110,28 @@ namespace CareWin8
         }
         #endregion
 
+        #region ControlWidthProperty
+        public static readonly DependencyProperty ControlWidthProperty =
+            DependencyProperty.Register("ControlWidth", typeof(String), typeof(PotentialEnemyView), new PropertyMetadata("600"));
+
+        public String ControlWidth
+        {
+            get { return (String)GetValue(ControlWidthProperty); }
+            set { SetValue(ControlWidthProperty, value); }
+        }
+        #endregion
+
+        #region ControlHeightProperty
+        public static readonly DependencyProperty ControlHeightProperty =
+            DependencyProperty.Register("ControlHeight", typeof(String), typeof(PotentialEnemyView), new PropertyMetadata("500"));
+
+        public String ControlHeight
+        {
+            get { return (String)GetValue(ControlHeightProperty); }
+            set { SetValue(ControlHeightProperty, value); }
+        }
+        #endregion
+
         private string id1 = "";
         private string id2 = "";
         private string id3 = "";
@@ -125,7 +147,16 @@ namespace CareWin8
 
         public PotentialEnemyView()
         {
-            this.InitializeComponent();
+            this.InitializeComponent(); 
+            InitControlSize();
+        }
+
+        private void InitControlSize()
+        {
+            int height = (int)(((double)500) / (768 - 160) * (Window.Current.Bounds.Height - 160));
+            int width = (int)(((double)600) / (1366 - 120) * (Window.Current.Bounds.Width - 120));
+            ControlWidth = width.ToString();
+            ControlHeight = height.ToString();
         }
 
         /// <summary>
@@ -155,7 +186,14 @@ namespace CareWin8
         }
 
         private void Refresh()
-        {             
+        {
+            Name1 = "";
+            Name2 = "";
+            Name3 = "";
+            Value1 = 0;
+            Value2 = 0;
+            Value3 = 0;
+
             if (m_progressBarHelper == null)
             {
                 m_progressBarHelper = new ProgressBarHelper(LoadProgessBar, () => { });
@@ -171,13 +209,13 @@ namespace CareWin8
                     m_herID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
                     break;
                 case EntryType.Renren:
-                    //fetcher = new RenrenFetcher();
+                    fetcher = new RenrenFetcher();
                     AvatarSource = PreferenceHelper.GetPreference("Renren_FollowerAvatar2");
                     Name = PreferenceHelper.GetPreference("Renren_FollowerNickName");
                     m_herID = PreferenceHelper.GetPreference("Renren_FollowerID");
                     break;
                 case EntryType.Douban:
-                    //fetcher = new DoubanFetcher();
+                    fetcher = new DoubanFetcher();
                     AvatarSource = PreferenceHelper.GetPreference("Douban_FollowerAvatar2");
                     Name = PreferenceHelper.GetPreference("Douban_FollowerNickName");
                     m_herID = PreferenceHelper.GetPreference("Douban_FollowerID");
@@ -188,6 +226,7 @@ namespace CareWin8
             }
             if (fetcher == null)
             {
+                DialogHelper.ShowMessageDialog("请至少登陆一个平台并设置好关注人");
                 m_progressBarHelper.PopTask();
                 return;
             }
@@ -257,7 +296,7 @@ namespace CareWin8
             }
         }
 
-        private void ConvertListToMap()
+        private void  ConvertListToMap()
         {
             m_mapMan.Clear();
             foreach (CommentMan man in m_listMan)
@@ -274,7 +313,7 @@ namespace CareWin8
                 if (!m_mapNameToID.ContainsKey(man.name))
                 {
                     m_mapNameToID.Add(man.name, man.id);
-                }
+                } 
             }
         }
 
@@ -298,7 +337,7 @@ namespace CareWin8
                 AvatarSource = PreferenceHelper.GetPreference("Renren_FollowerAvatar2");
                 Name = PreferenceHelper.GetPreference("Renren_FollowerNickName");
                 m_herID = PreferenceHelper.GetPreference("Renren_FollowerID");
-                //fetcher = new RenrenFetcher();
+                fetcher = new RenrenFetcher();
                 m_type = EntryType.Renren;
             }
             else if (!String.IsNullOrEmpty(PreferenceHelper.GetPreference("Douban_ID"))
@@ -308,7 +347,7 @@ namespace CareWin8
                 AvatarSource = PreferenceHelper.GetPreference("Douban_FollowerAvatar2");
                 Name = PreferenceHelper.GetPreference("Douban_FollowerNickName");
                 m_herID = PreferenceHelper.GetPreference("Renren_FollowerID");
-                //fetcher = new DoubanFetcher();
+                fetcher = new DoubanFetcher();
                 m_type = EntryType.Douban;
             }
             return fetcher;
@@ -330,6 +369,14 @@ namespace CareWin8
             {
                 Share_SinaWeibo();
             }
+            else if (type == EntryType.Renren)
+            {
+                Share_Renren();
+            }
+            else if (type == EntryType.Douban)
+            {
+                Share_Douban();
+            }
         }
 
         private void Share_SinaWeibo()
@@ -345,5 +392,70 @@ namespace CareWin8
             Frame.Navigate(typeof(AddCommitView), parameters);
         }
 
+        private void Share_Renren()
+        {
+            String herID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
+            StringBuilder sentence = new StringBuilder();
+            sentence.Append(string.Format(
+                    "收取了可观小的小费后，酒馆老板小声道："
+                    + "看在你对@{0}({1}) 一片痴情的份上，我可以告诉你@{2}({3}) 似乎在做些小动作，而@{4}({5}) 更值得你注意，当然了，你的头号情敌非@{6}({7}) 莫属~~",
+                     Name, herID, Name3, id3, Name2, id2, Name1, id1));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.SinaWeibo);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void Share_Douban()
+        {
+            StringBuilder sentence = new StringBuilder();
+            sentence.Append(string.Format(
+                    "收取了可观小的小费后，酒馆老板小声道："
+                    + "看在你对@{0} 一片痴情的份上，我可以告诉你@{1} 似乎在做些小动作，而@{2} 更值得你注意，当然了，你的头号情敌非@{3} 莫属~~",
+                     Name, Name3, Name2, Name1));
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("Content", sentence.ToString());
+            parameters.Add("Type", EntryType.Douban);
+            Frame.Navigate(typeof(AddCommitView), parameters);
+        }
+
+        private void UseSinaWeibo_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            if(String.IsNullOrEmpty(PreferenceHelper.GetPreference("SinaWeibo_ID"))
+                || String.IsNullOrEmpty(PreferenceHelper.GetPreference("SinaWeibo_FollowerID")))
+            {
+                DialogHelper.ShowMessageDialog("新浪微博帐号尚未指定关注人~~");
+                return;
+            }
+            m_type = EntryType.SinaWeibo;
+            Refresh();
+        }
+
+        private void UseRenren_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            if (String.IsNullOrEmpty(PreferenceHelper.GetPreference("Renren_ID"))
+                 || String.IsNullOrEmpty(PreferenceHelper.GetPreference("Renren_FollowerID")))
+            {
+                DialogHelper.ShowMessageDialog("人人帐号尚未指定关注人~~");
+                return;
+            }
+            m_type = EntryType.Renren;
+            Refresh();
+        }
+
+        private void UseDouban_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            topAppBar.IsOpen = false;
+            if (String.IsNullOrEmpty(PreferenceHelper.GetPreference("Douban_ID"))
+                    || String.IsNullOrEmpty(PreferenceHelper.GetPreference("Douban_FollowerID")))
+            {
+                DialogHelper.ShowMessageDialog("豆瓣帐号尚未指定关注人~~");
+                return;
+            }
+            m_type = EntryType.Douban;
+            Refresh();
+        }
     }
 }

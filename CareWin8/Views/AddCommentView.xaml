@@ -38,21 +38,21 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="添加评论" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock  FontFamily="Microsoft YaHei" x:Name="pageTitle" Grid.Column="1" Text="添加评论" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
         
         <StackPanel Grid.Row="1">
-            <TextBox Name="txtContent"  Margin="120,10,0,0" MaxLength="{Binding WordMaxLength}"  Width="700" Height="300"  FontSize="28" TextWrapping="Wrap"  HorizontalAlignment="Left" VerticalAlignment="Top" TextChanged="TextBox_TextChanged"></TextBox>
+            <TextBox  FontFamily="Microsoft YaHei" Name="txtContent"  Margin="120,10,0,0" MaxLength="{Binding WordMaxLength}"  Width="700" Height="300"  FontSize="28" TextWrapping="Wrap"  HorizontalAlignment="Left" VerticalAlignment="Top" TextChanged="TextBox_TextChanged"></TextBox>
             <Grid  Margin="120,10,0,0" Width="700" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Width="100" Height="50" Content="提交" FontSize="25" Click="Submit_Click"></Button>
+                <Button FontFamily="Microsoft YaHei"  Width="100" Height="50" Content="提交" FontSize="25" Click="Submit_Click"></Button>
                 <StackPanel HorizontalAlignment="Right"  Grid.Column="1" Orientation="Horizontal">
                     <Image Margin="0,0,10,0"  Source="{Binding LogoSource}" MaxHeight="40"  HorizontalAlignment="Right" VerticalAlignment="Top"></Image>
-                    <TextBlock Margin="0,5,0,0" Text="剩余字数:" FontSize="25" VerticalAlignment="Top"  HorizontalAlignment="Right"/>
-                    <TextBlock Margin="0,5,0,0" Text="{Binding WordCount}" FontSize="25"  VerticalAlignment="Top"  HorizontalAlignment="Right"/>
+                    <TextBlock  FontFamily="Microsoft YaHei" Margin="0,5,0,0" Text="剩余字数:" FontSize="25" VerticalAlignment="Top"  HorizontalAlignment="Right"/>
+                    <TextBlock  FontFamily="Microsoft YaHei" Margin="0,5,0,0" Text="{Binding WordCount}" FontSize="25"  VerticalAlignment="Top"  HorizontalAlignment="Right"/>
                 </StackPanel>               
             </Grid>
         </StackPanel>

@@ -38,11 +38,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：配对指数" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock  FontFamily="Microsoft YaHei" x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：配对指数" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
 
         <StackPanel Grid.Row="1" Margin="120,20,0,6" Orientation="Horizontal">
-            <Grid  Width="600" Height="500" x:Name="ControlPanel"   Grid.Column="0">
+            <Grid  Width="{Binding ControlWidth}" Height="{Binding ControlHeight}" x:Name="ControlPanel"   Grid.Column="0">
             </Grid>
 
             <StackPanel  VerticalAlignment="Bottom" Margin="20,0,0,0">
@@ -50,26 +50,26 @@
                     <Border VerticalAlignment="Top"  Background="Green" Width="80" Height="80" CornerRadius="3" >
                         <Grid>
                             <Image  Source="/Images/Thumb/DefaultAvatar.png"  Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                            <Image  Source="{Binding HerAvatarSource}"  Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            <Image  Source="{Binding HerAvatarSource}" Stretch="UniformToFill" Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
                         </Grid>
                     </Border>
                     <StackPanel VerticalAlignment="Stretch" MinWidth="300">
-                        <TextBlock Text="{Binding HerName}" TextWrapping="Wrap"  MaxWidth="300"  Margin="10,0,40,0"  FontSize="35"  Foreground="Green" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                        <TextBlock Text="{Binding MyName}" TextWrapping="Wrap" MaxWidth="300" Margin="0,0,10,0"  FontSize="35"  Foreground="Green" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
+                        <TextBlock  FontFamily="Microsoft YaHei" Text="{Binding HerName}" TextWrapping="Wrap"  MaxWidth="300"  Margin="10,0,40,0"  FontSize="35"  Foreground="Green" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                        <TextBlock  FontFamily="Microsoft YaHei" Text="{Binding MyName}" TextWrapping="Wrap" MaxWidth="300" Margin="0,0,10,0"  FontSize="35"  Foreground="Green" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
                     </StackPanel>
 
                     <Border VerticalAlignment="Bottom"  Background="Green" Width="80" Height="80" CornerRadius="3" >
                         <Grid>
                             <Image  Source="/Images/Thumb/DefaultAvatar.png"  Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                            <Image  Source="{Binding MyAvatarSource}"  Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            <Image  Source="{Binding MyAvatarSource}" Stretch="UniformToFill" Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
                         </Grid>
                     </Border>
                 </StackPanel>
                 <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center"  Orientation="Horizontal">
-                    <TextBlock FontSize="25" Text="配对指数 :"  Foreground="Green" VerticalAlignment="Bottom"/>
-                    <TextBlock FontSize="25" Text="{Binding Param1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                    <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="配对指数 :"  Foreground="Green" VerticalAlignment="Bottom"/>
+                    <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Param1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
                     <Image Margin="50,0,0,-3"  Width="35" Height="35"  Source="/Images/Thumb/Share.png" VerticalAlignment="Bottom" Tapped="Share_Tapped"></Image>
-                    <TextBlock Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom" Tapped="Share_Tapped"></TextBlock>
+                    <TextBlock  FontFamily="Microsoft YaHei" Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom" Tapped="Share_Tapped"></TextBlock>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

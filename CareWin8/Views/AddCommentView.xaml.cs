@@ -56,6 +56,7 @@ namespace CareWin8
         #endregion
 
         ItemViewModel m_itemViewModel;
+        CommentViewModel m_commentViewModel;
         EntryType m_type = EntryType.NotSet;
         int m_maxLenth;
 
@@ -64,13 +65,22 @@ namespace CareWin8
             this.InitializeComponent();
         }
 
+        // 跳转到此页有2种情况
+        // 1:对状态本身的评论  此时m_itemViewModel有值
+        // 2:对评论本身的评论  此时m_itemViewModel和m_commentViewModel都需要有值
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             try
             {
-                m_itemViewModel = e.Parameter as ItemViewModel;
-                m_type = m_itemViewModel.Type;
+                Dictionary<String, Object> parameters = e.Parameter as Dictionary<String, Object>;
+                if (parameters.ContainsKey("ItemViewModel"))
+                {
+                    m_itemViewModel = parameters["ItemViewModel"] as ItemViewModel;
+                    m_type = m_itemViewModel.Type;
+                }
+                if (parameters.ContainsKey("CommentViewModel"))
+                    m_commentViewModel = parameters["CommentViewModel"] as CommentViewModel;
             }
             catch (System.Exception ex)
             {
@@ -88,11 +98,12 @@ namespace CareWin8
                 WordCount = "140";
                 LogoSource = "/Images/Logo/sinaweibo_logo.png";
             }
+            // 人人在回复时最长也是140，只是发表新状态时可以到280
             else if (m_type == EntryType.Renren)
             {
-                m_maxLenth = 280;
-                WordMaxLength = "280";
-                WordCount = "280";
+                m_maxLenth = 140;
+                WordMaxLength = "140";
+                WordCount = "140";
                 LogoSource = "/Images/Logo/renren_logo.png";
             }
             else if (m_type == EntryType.Douban)
@@ -101,6 +112,24 @@ namespace CareWin8
                 WordMaxLength = "140";
                 WordCount = "140";
                 LogoSource = "/Images/Logo/douban_logo.png";
+            }
+            // m_commentViewModel不为空说明是对评论本身的评论
+            // 各平台目前对评论的回复其实和对状态本身的回复没有本质区别
+            // 都是调用一样的接口，但是前面加上了一对“对XX说”之类的文字
+            if (m_commentViewModel != null)
+            {
+                if (m_type == EntryType.SinaWeibo)
+                {
+                    txtContent.Text = String.Format("回复@{0}: ", m_commentViewModel.Title);
+                }
+                else if (m_type == EntryType.Renren)
+                {
+                    txtContent.Text = String.Format("回复{0}: ", m_commentViewModel.Title);
+                }
+                else if (m_type == EntryType.Douban)
+                {
+                    txtContent.Text = String.Format("@{0}: ", m_commentViewModel.DoubanUID);
+                }
             }
         }
 
@@ -151,11 +180,89 @@ namespace CareWin8
 
         private void RenrenSend()
         {
-
+            if (m_itemViewModel == null)
+                return;
+            if (m_itemViewModel.RenrenFeedType == RenrenSDK.RenrenNews.FeedTypeStatus)
+            {
+                RenrenSendForStatus();
+            }
+            else if (m_itemViewModel.RenrenFeedType == RenrenSDK.RenrenNews.FeedTypeUploadPhoto)
+            {
+                RenrenSendForUploadPhoto();
+            }
+            else if (m_itemViewModel.RenrenFeedType == RenrenSDK.RenrenNews.FeedTypeSharePhoto)
+            {
+                RenrenSendForShare();
+            }   
         }
-        private void DoubanSend()
-        {
 
+        private async void RenrenSendForStatus()
+        {
+            RenrenSDK.ResultResponse response
+                = await App.RenrenAPI.StatusAPI.AddComment(m_itemViewModel.ID, m_itemViewModel.OwnerID, txtContent.Text);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.result == "1")
+            {
+                DialogHelper.ShowToastDialog("发送成功");
+                Frame.GoBack();
+            }
+            else
+            {
+                DialogHelper.ShowToastDialog("发送失败，请检查网络是否稳定");
+            }
+        }
+
+
+        private async void RenrenSendForUploadPhoto()
+        {
+            RenrenSDK.ResultResponse response
+                = await App.RenrenAPI.PhotoAPI.AddComment(m_itemViewModel.ID, m_itemViewModel.OwnerID, txtContent.Text);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.result == "1")
+            {
+                DialogHelper.ShowToastDialog("发送成功");
+                Frame.GoBack();
+            }
+            else
+            {
+                DialogHelper.ShowToastDialog("发送失败，请检查网络是否稳定");
+            }
+        }
+
+        private async void RenrenSendForShare()
+        {
+            RenrenSDK.ResultResponse response
+                = await App.RenrenAPI.ShareAPI.AddComment(m_itemViewModel.ID, m_itemViewModel.OwnerID, txtContent.Text);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.result == "1")
+            {
+                DialogHelper.ShowToastDialog("发送成功");
+                Frame.GoBack();
+            }
+            else
+            {
+                DialogHelper.ShowToastDialog("发送失败，请检查网络是否稳定");
+            }
+        }
+
+        private async void DoubanSend()
+        {
+            if (m_itemViewModel == null)
+                return;
+
+            // 豆瓣很特殊，对转发的评论实际上就是原始广播的评论
+            String finalID = m_itemViewModel.ID;
+            if (m_itemViewModel.ForwardItem != null)
+                finalID = m_itemViewModel.ForwardItem.ID;
+
+            DoubanSDK.BaseResponse response =
+                await App.DoubanAPI.ShuoAPI.AddComment(finalID, txtContent.Text);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS)
+            {
+                DialogHelper.ShowToastDialog("发送成功");
+                Frame.GoBack();
+            }
+            else
+            {
+                DialogHelper.ShowToastDialog("发送失败，请检查网络是否稳定");
+            }
         }
 
         private void Submit_Click(object sender, RoutedEventArgs e)

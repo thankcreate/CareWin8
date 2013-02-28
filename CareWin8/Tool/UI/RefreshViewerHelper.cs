@@ -14,6 +14,7 @@ using Windows.UI.Notifications;
 using NotificationsExtensions.BadgeContent;
 using NotificationsExtensions.TileContent;
 using Windows.Data.Xml.Dom;
+
 namespace CareWin8
 {
     // 统领所有的主要资源Refresh操作
@@ -24,15 +25,24 @@ namespace CareWin8
 
         public static void RefreshMainViewModel(ProgressBarHelper progressBarHelper)
         {
-            if ( progressBarHelper == null)
-                return;
-            progressBarHelper.PushTask("SinaWeibo");
-            progressBarHelper.PushTask("Rss");
+            Task.Run(() =>
+            {
+                if (progressBarHelper == null)
+                    return;
+                progressBarHelper.PushTask("SinaWeibo");
+                progressBarHelper.PushTask("Rss");
+                progressBarHelper.PushTask("Renren");
+                progressBarHelper.PushTask("Douban");
 
-            // 1.Weibo
-            RefreshModelSinaWeibo(progressBarHelper);
-            // 2.Rss
-            RefreshModelRssFeed(progressBarHelper);
+                // 1.Weibo
+                RefreshModelSinaWeibo(progressBarHelper);
+                // 2.Rss
+                RefreshModelRssFeed(progressBarHelper);
+                // 3.Renren
+                RefreshModelRenren(progressBarHelper);
+                // 4.Douban 
+                RefreshModelDouban(progressBarHelper);
+            });
         }
 
         private static async void RefreshModelRssFeed(ProgressBarHelper progressBarHelper)
@@ -54,7 +64,7 @@ namespace CareWin8
             {                
                 try
                 {
-                    SyndicationFeed feed = new SyndicationFeed();
+                    SyndicationFeed feed = new SyndicationFeed();                    
                     feed.Load(response.Content);
                     foreach (SyndicationItem item in feed.Items)
                     {
@@ -86,24 +96,34 @@ namespace CareWin8
         {
             App.MainViewModel.SinaWeiboPicItems.Clear();
             App.MainViewModel.SinaWeiboItems.Clear();
+
+            // 1.检查有没有登陆
             if (String.IsNullOrEmpty(PreferenceHelper.GetPreference("SinaWeibo_ID")))
             {
                 progressBarHelper.PopTask("Sina");
                 return;
             }
+            // 2.检查有没有指定帐号
             String followerID = PreferenceHelper.GetPreference("SinaWeibo_FollowerID");
             if (String.IsNullOrEmpty(followerID))
             {
-                DialogHelper.ShowMessageDialog("尚未设置新浪微博关注对象");
+                //DialogHelper.ShowToastDialog("尚未设置新浪微博关注对象");
                 progressBarHelper.PopTask();
                 return;
             }
 
+            // 3.检查有授权有没有过期
+            if (App.SinaWeiboAPI.IsAccessTokenOutOfDate())
+            {
+                DialogHelper.ShowToastDialog("新浪授权已过期，请重新登陆");
+                PreferenceHelper.RemoveSinaWeiboLoginAccountPreference();
+                progressBarHelper.PopTask();
+            }
             
             String strCount = PreferenceHelper.GetPreference("SinaWeibo_RecentCount");
             if (String.IsNullOrEmpty(strCount))
             {
-                strCount = "20";
+                strCount = "40";
             }
 
             int nCount;
@@ -113,7 +133,7 @@ namespace CareWin8
             }
             catch (System.Exception ex)
             {
-                nCount = 20;
+                nCount = 40;
             }
             
             SinaWeiboSDK.GetUserTimelineResponse response = await App.SinaWeiboAPI.StatuesAPI.GetUserTimeline(followerID, nCount);
@@ -140,7 +160,158 @@ namespace CareWin8
             }
         }
 
+        private static async void RefreshModelDouban(ProgressBarHelper progressBarHelper)
+        {
+            //App.MainViewModel.DoubanPicItems.Clear();
+            App.MainViewModel.DoubanItems.Clear();
+            
+            // 1.检查有没有登陆
+            if (String.IsNullOrEmpty(PreferenceHelper.GetPreference("Douban_ID")))
+            {
+                progressBarHelper.PopTask("Douban");
+                return;
+            }
 
+            // 2.检查有没有指定帐号
+            String followerID = PreferenceHelper.GetPreference("Douban_FollowerID");
+            if (String.IsNullOrEmpty(followerID))
+            {                
+                progressBarHelper.PopTask();
+                return;
+            }
+
+            // 3.检查有授权有没有过期
+            if (App.DoubanAPI.IsAccessTokenOutOfDate())
+            {            
+                // 1)先尝试用refresh_token刷新
+                DoubanSDK.GetTokenByCodeResponse response = await App.DoubanAPI.AuthorityAPI.GetTokenByRefreshToken();
+                if (response.Error == RestError.ERROR_SUCCESS && !String.IsNullOrEmpty(response.access_token))
+                {
+                    // 成功，则重新把这个函数跑一遍
+                    PreferenceHelper.SetPreference("Douban_Token", response.access_token);
+                    RefreshModelDouban(progressBarHelper);
+                }
+                // 2)刷新不了，提示错误信息
+                else
+                {
+                    DialogHelper.ShowToastDialog("豆瓣授权已过期，请重新登陆");
+                    PreferenceHelper.RemoveDoubanLoginAccountPreference();
+                    progressBarHelper.PopTask();
+                }
+            }
+            else
+            {
+
+                String strCount = PreferenceHelper.GetPreference("Douban_RecentCount");
+                if (String.IsNullOrEmpty(strCount))
+                {
+                    strCount = "40";
+                }
+
+                int nCount;
+                try
+                {
+                    nCount = int.Parse(strCount);
+                }
+                catch (System.Exception ex)
+                {
+                    nCount = 40;
+                }
+
+                DoubanSDK.GetUserTimelineResponse response = await App.DoubanAPI.ShuoAPI.GetUserTimeline(followerID, nCount);
+                if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.ListStatus != null)
+                {
+                    foreach (DoubanSDK.Status status in response.ListStatus)
+                    {
+                        ItemViewModel model = DoubanConverter.ConvertDoubanUnionStatues(status);
+                        if (model != null)
+                        {
+                            App.MainViewModel.DoubanItems.Add(model);
+                        }
+                    }
+                    progressBarHelper.PopTask();
+                }
+                else
+                {
+                    if (response.Error == RestBase.RestError.ERROR_EXPIRED)
+                    {
+                        DialogHelper.ShowMessageDialog("豆瓣帐号已过期，请重新登陆", "温馨提示");
+                        PreferenceHelper.RemoveDoubanLoginAccountPreference();
+                    }
+                    progressBarHelper.PopTask();
+                }
+            }
+
+        }
+
+        private static async void RefreshModelRenren(ProgressBarHelper progressBarHelper)
+        {
+            App.MainViewModel.RenrenPicItems.Clear();
+            App.MainViewModel.RenrenItems.Clear();
+
+            // 1.检查有没有登陆
+            if (String.IsNullOrEmpty(PreferenceHelper.GetPreference("Renren_ID")))
+            {
+                progressBarHelper.PopTask("Renren");
+                return;
+            }
+
+            // 2.检查有没有指定帐号
+            String followerID = PreferenceHelper.GetPreference("Renren_FollowerID");
+            if (String.IsNullOrEmpty(followerID))
+            {
+                //DialogHelper.ShowToastDialog("尚未设置人人关注对象");
+                progressBarHelper.PopTask();
+                return;
+            }
+
+            // 3.检查有授权有没有过期
+            if (App.RenrenAPI.IsAccessTokenOutOfDate())
+            {
+                DialogHelper.ShowToastDialog("人人授权已过期，请重新登陆");
+                PreferenceHelper.RemoveRenrenLoginAccountPreference();
+                progressBarHelper.PopTask();
+            }
+
+            String strCount = PreferenceHelper.GetPreference("Renren_RecentCount");
+            if (String.IsNullOrEmpty(strCount))
+            {
+                strCount = "40";
+            }
+
+            int nCount;
+            try
+            {
+                nCount = int.Parse(strCount);
+            }
+            catch (System.Exception ex)
+            {
+                nCount = 40;
+            }
+
+            RenrenSDK.GetUserTimelineResponse response = await App.RenrenAPI.FeedAPI.GetUserTimeline(followerID, "10,30,32" ,nCount);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.ListRenrenNews != null)
+            {
+                foreach (RenrenSDK.RenrenNews news in response.ListRenrenNews)
+                {
+                    ItemViewModel model = RenrenConverter.ConvertRenrenNewsToCommon(news);
+                    if (model != null)
+                    {
+                        App.MainViewModel.RenrenItems.Add(model);
+                    }
+                }
+                progressBarHelper.PopTask();
+            }
+            else
+            {
+                if (response.Error == RestBase.RestError.ERROR_EXPIRED)
+                {
+                    DialogHelper.ShowMessageDialog("人人帐号已过期或者出现了网络问题，请重新登陆", "温馨提示");
+                    PreferenceHelper.RemoveSinaWeiboLoginAccountPreference();
+                }
+                progressBarHelper.PopTask();
+            }
+        }
 
         public static void RefreshViewItems()
         {
@@ -161,8 +332,9 @@ namespace CareWin8
             {
                 ItemViewModel model = new ItemViewModel();
                 model.Title = "没有得到任何结果的说~~~";
-                model.Content = "请到帐号设置页中登陆并设置关注人";
+                model.Content = "请确保网络通畅。如果没有设置关注人，请到帐号设置页中登陆并设置关注人";
                 model.Type = EntryType.Nothing;
+                model.IconURL = "/Images/Thumb/DefaultAvatar.png";
                 model.ID = "nothing";
                 App.MainViewModel.ListItems.Add(model);
             }
@@ -182,10 +354,15 @@ namespace CareWin8
             {
                 tempList.Add(App.MainViewModel.Items[i]);
             }
-            ItemViewModel showMore = new ItemViewModel();
-            showMore.Type = EntryType.ShowMore;
-            tempList.Add(showMore);
-            if (!IsTheSame(tempList, App.MainViewModel.TopItems))
+
+            if (HaveMeaningfullItem(tempList))
+            {
+                ItemViewModel showMore = new ItemViewModel();
+                showMore.Type = EntryType.ShowMore;
+                tempList.Add(showMore);
+            }
+
+            if (!IsItemListTheSame(tempList, App.MainViewModel.TopItems))
             {
                 App.MainViewModel.TopItems.Clear();
                 foreach (ItemViewModel model in tempList)
@@ -193,7 +370,7 @@ namespace CareWin8
                     App.MainViewModel.TopItems.Add(model);
                 }
                 // 离开前，先把当前的TopItem缓存起来，这样下次进来就可以直接看到了
-                SaveToLoaclCache();
+                SaveTopItemToLoaclCache();
             }
 
             // 开始刷新图片页信息
@@ -207,7 +384,23 @@ namespace CareWin8
             TileUpdateHelper.Update();
         }
 
-        private static bool IsTheSame(ObservableCollection<ItemViewModel> list1, ObservableCollection<ItemViewModel> list2)
+        private static bool HaveMeaningfullItem(ObservableCollection<ItemViewModel> list1)
+        {
+            if (list1 == null || list1.Count == 0)
+                return false;
+            foreach (ItemViewModel model in list1)
+            {
+                if (model.Type != EntryType.Nothing
+                    && model.Type != EntryType.ShowMore
+                    && model.Type != EntryType.NotSet)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool IsItemListTheSame(ObservableCollection<ItemViewModel> list1, ObservableCollection<ItemViewModel> list2)
         {
             try
             {
@@ -227,7 +420,7 @@ namespace CareWin8
             }            
         }
 
-        private static void SaveToLoaclCache()
+        private static void SaveTopItemToLoaclCache()
         {
             StorageHelper<ObservableCollection<ItemViewModel>> stHelper = 
                 new StorageHelper<ObservableCollection<ItemViewModel>>(StorageType.Local);
@@ -240,6 +433,7 @@ namespace CareWin8
             App.MainViewModel.ListPictureItems.Clear();
             App.MainViewModel.ListPictureItems.AddRange(App.MainViewModel.SinaWeiboPicItems);
             App.MainViewModel.ListPictureItems.AddRange(App.MainViewModel.RenrenPicItems);
+            App.MainViewModel.ListPictureItems.AddRange(App.MainViewModel.DoubanPicItems);
             App.MainViewModel.ListPictureItems.Sort(
                 delegate(PictureItemViewModel a, PictureItemViewModel b)
                 {
@@ -255,6 +449,16 @@ namespace CareWin8
             {
                 App.MainViewModel.PictureItems.Add(item);
             }
+
+            // 把Pic列表存到本地缓存中
+            SavePicItemToLocalCache();       
+        }
+
+        private static void SavePicItemToLocalCache()
+        {
+            StorageHelper<ObservableCollection<PictureItemViewModel>> stHelper =
+                new StorageHelper<ObservableCollection<PictureItemViewModel>>(StorageType.Local);
+            stHelper.SaveASync(App.MainViewModel.PictureItems, "PicItems");
         }
     }
 }

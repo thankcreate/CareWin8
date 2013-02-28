@@ -113,13 +113,174 @@ namespace CareWin8
             }
             m_progressBarHelper.PopTask();
         }
+
         private void RefreshCommentsForRenren()
         {
+            ObservableCollection<CommentViewModel> collection;
+            try
+            {
+                collection = this.DefaultViewModel["CommentItems"] as ObservableCollection<CommentViewModel>;
+                collection.Clear();
+            }
+            catch (System.Exception ex)
+            {
+                m_progressBarHelper.PopTask();
+                return;
+            }
 
+            if (collection == null)
+            {
+                m_progressBarHelper.PopTask();
+                return;
+            }
+
+            try
+            {
+                if (m_itemViewModel.RenrenFeedType == RenrenSDK.RenrenNews.FeedTypeStatus)
+                {
+                    RefreshCommentsForRenrenStatus();
+                }
+                else if (m_itemViewModel.RenrenFeedType == RenrenSDK.RenrenNews.FeedTypeUploadPhoto)
+                {
+                    RefreshCommentsForRenrenUploadPhoto();
+                }
+                else if (m_itemViewModel.RenrenFeedType == RenrenSDK.RenrenNews.FeedTypeSharePhoto)
+                {
+                    RefreshCommentsForRenrenShare();
+                }   
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }
+            finally
+            {
+                m_progressBarHelper.PopTask();
+            }
+            
+           
         }
-        private void RefreshCommentsForDouban()
-        {
 
+        private async void RefreshCommentsForRenrenStatus()
+        {
+            ObservableCollection<CommentViewModel> collection 
+                = this.DefaultViewModel["CommentItems"] as ObservableCollection<CommentViewModel>;
+
+            RenrenSDK.GetStatusCommentsResponse response =
+                await App.RenrenAPI.StatusAPI.GetComments(m_itemViewModel.ID, m_itemViewModel.OwnerID);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.ListComments != null)
+            {
+                foreach (RenrenSDK.StatusComment comment in response.ListComments)
+                {
+                    CommentViewModel model = RenrenConverter.ConvertStatusCommentToCommon(comment);
+                    if (model != null)
+                    {
+                        collection.Add(model);
+                    }
+                }
+            }
+        }
+
+        private async void RefreshCommentsForRenrenUploadPhoto()
+        {
+            ObservableCollection<CommentViewModel> collection
+                = this.DefaultViewModel["CommentItems"] as ObservableCollection<CommentViewModel>;
+
+            RenrenSDK.GetPhotoCommentsResponse response =
+                await App.RenrenAPI.PhotoAPI.GetComments(m_itemViewModel.ID, m_itemViewModel.OwnerID);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.ListComments != null)
+            {
+                foreach (RenrenSDK.PhotoComment comment in response.ListComments)
+                {
+                    CommentViewModel model = RenrenConverter.ConvertPhotoCommentToCommon(comment);
+                    if (model != null)
+                    {
+                        collection.Add(model);
+                    }
+                }
+            }
+        }
+
+        private async void RefreshCommentsForRenrenShare()
+        {
+            ObservableCollection<CommentViewModel> collection
+                = this.DefaultViewModel["CommentItems"] as ObservableCollection<CommentViewModel>;
+
+            RenrenSDK.GetShareCommentsResponse response =
+                await App.RenrenAPI.ShareAPI.GetComments(m_itemViewModel.ID, m_itemViewModel.OwnerID);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.comments != null)
+            {
+                // 之所以建了一个临时list，是因为豆瓣的API不支持降序的评论列表
+                List<CommentViewModel> sortList = new List<CommentViewModel>();
+                foreach (RenrenSDK.ShareComment comment in response.comments)
+                {
+                    CommentViewModel model = RenrenConverter.ConvertShareCommentToCommon(comment);
+                    if (model != null)
+                    {
+                        sortList.Add(model);
+                    }
+                }
+                // DateTimeOffset是不可能为空的，所以这里不用担心
+                var sorted = from m in sortList orderby m.TimeObject descending select m;
+                if (sorted != null)
+                {
+                    foreach (CommentViewModel model in sorted)
+                    {
+                        collection.Add(model);
+                    }
+                }
+            }
+        }
+
+        private async void RefreshCommentsForDouban()
+        {
+            ObservableCollection<CommentViewModel> collection;
+            try
+            {
+                collection = this.DefaultViewModel["CommentItems"] as ObservableCollection<CommentViewModel>;
+                collection.Clear();
+            }
+            catch (System.Exception ex)
+            {
+                m_progressBarHelper.PopTask();
+                return;
+            }
+            if (collection == null)
+            {
+                m_progressBarHelper.PopTask();
+                return;
+            }
+
+
+            // 豆瓣很特殊，对转发的评论实际上就是原始广播的评论
+            String finalID = m_itemViewModel.ID;
+            if(m_itemViewModel.ForwardItem != null)
+                finalID = m_itemViewModel.ForwardItem.ID;
+
+            DoubanSDK.GetCommentsResponse response = await App.DoubanAPI.ShuoAPI.GetComments(finalID);
+            if (response.Error == RestBase.RestError.ERROR_SUCCESS && response.ListComments != null)
+            {
+                // 之所以建了一个临时list，是因为豆瓣的API不支持降序的评论列表
+                List<CommentViewModel> sortList = new List<CommentViewModel>();
+                foreach (DoubanSDK.Comment rawComment in response.ListComments)
+                {
+                    CommentViewModel model = DoubanConverter.ConvertCommentToCommon(rawComment);
+                    if (model != null)
+                    {
+                        sortList.Add(model);
+                    }
+                }
+                // DateTimeOffset是不可能为空的，所以这里不用担心
+                var sorted = from m in sortList orderby m.TimeObject descending select m;
+                if (sorted != null)
+                {
+                    foreach (CommentViewModel model in sorted)
+                    {
+                        collection.Add(model);
+                    }
+                }
+            }
+            m_progressBarHelper.PopTask();
         }
 
         /// <summary>
@@ -152,7 +313,55 @@ namespace CareWin8
 
         private void AddComment_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Frame.Navigate(typeof(AddCommentView), m_itemViewModel);
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("ItemViewModel", m_itemViewModel);
+            Frame.Navigate(typeof(AddCommentView), parameters);
+        }
+
+
+        private void ForwardImage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameworkElement image = sender as FrameworkElement;
+            if (image == null)
+                return;
+            ItemViewModel model = image.DataContext as ItemViewModel;
+            if (model == null)
+                return;
+            if (model.ForwardItem == null)
+                return;
+            String fullURL = model.ForwardItem.FullImageURL;
+
+            MyControl.FullImageControl control = new MyControl.FullImageControl(fullURL);
+            control.ShowPop();
+            e.Handled = true;
+        }
+
+        private void ContentImage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameworkElement image = sender as FrameworkElement;
+            if (image == null)
+                return;
+            ItemViewModel model = image.DataContext as ItemViewModel;
+            if (model == null)
+                return;
+            String fullURL = model.FullImageURL;
+            MyControl.FullImageControl control = new MyControl.FullImageControl(fullURL);
+            control.ShowPop();
+            e.Handled = true;
+        }
+
+        private void CommentToComment_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameworkElement image = sender as FrameworkElement;
+            if (image == null)
+                return;
+            CommentViewModel model = image.DataContext as CommentViewModel;
+            if (model == null)
+                return;
+            Dictionary<String, Object> parameters = new Dictionary<String, Object>();
+            parameters.Add("ItemViewModel", m_itemViewModel);
+            parameters.Add("CommentViewModel", model);
+            Frame.Navigate(typeof(AddCommentView), parameters);
         }
     }
 }

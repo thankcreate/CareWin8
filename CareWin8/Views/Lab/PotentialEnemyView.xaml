@@ -38,7 +38,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：潜在情敌" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock FontFamily="Microsoft YaHei"  x:Name="pageTitle" Grid.Column="1" Text="奇怪的地方：潜在情敌" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
         
         <Grid Grid.Row="1" Margin="120,20,0,6" >
@@ -46,7 +46,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid  Width="600" Height="500"  Grid.Column="0">
+            <Grid  Width="{Binding ControlWidth}" Height="{Binding ControlHeight}"  Grid.Column="0">
                 <ProgressBar x:Name="LoadProgessBar" ShowPaused="True"  Background="Transparent" IsIndeterminate="True" Value="0" />
                 <Grid   x:Name="ControlPanel" >
                 </Grid>
@@ -64,29 +64,29 @@
                     <Border Margin="0,0,0,0"  Background="Green" Width="60" Height="60" CornerRadius="3" >
                         <Grid>
                             <Image  Source="/Images/Thumb/DefaultAvatar.png"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                            <Image  Source="{Binding AvatarSource}"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            <Image  Source="{Binding AvatarSource}" Stretch="UniformToFill"  Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
                         </Grid>
                     </Border>
-                    <TextBlock  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Name}" Margin="10,0,0,0"  TextWrapping="Wrap"  FontSize="35"  Foreground="Green" VerticalAlignment="Bottom"/>
+                    <TextBlock   FontFamily="Microsoft YaHei" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Name}" Margin="10,0,0,0"  TextWrapping="Wrap"  FontSize="35"  Foreground="Green" VerticalAlignment="Bottom"/>
                 </Grid>
                 <StackPanel Grid.Row="1"  Orientation="Horizontal">
                     <StackPanel>
                         <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left"  Orientation="Horizontal">
-                            <TextBlock FontSize="25"  Foreground="Green"  Text="头号情敌 :"  />
-                            <TextBlock FontSize="25" Text="{Binding Name1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25"  Foreground="Green"  Text="头号情敌 :"  />
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Name1}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
                         </StackPanel>
                         <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left"  Orientation="Horizontal">
-                            <TextBlock FontSize="25"  Foreground="Green"  Text="不可小觑 :"  />
-                            <TextBlock FontSize="25" Text="{Binding Name2}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25"  Foreground="Green"  Text="不可小觑 :"  />
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Name2}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
                         </StackPanel>
                         <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left"  Orientation="Horizontal">
-                            <TextBlock FontSize="25"  Foreground="Green"  Text="值得留意 :"  />
-                            <TextBlock FontSize="25" Text="{Binding Name3}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25"  Foreground="Green"  Text="值得留意 :"  />
+                            <TextBlock  FontFamily="Microsoft YaHei" FontSize="25" Text="{Binding Name3}" Foreground="#FFE38C3F" Margin="20,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="100,0,0,0" VerticalAlignment="Bottom" Orientation="Horizontal" Tapped="Share_Tapped">
                         <Image   Width="35" Height="35"  Source="/Images/Thumb/Share.png" VerticalAlignment="Bottom"></Image>
-                        <TextBlock Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom"></TextBlock>
+                        <TextBlock  FontFamily="Microsoft YaHei" Text="分享" Margin="5,0,0,-3"  FontSize="25" Foreground="Green"  VerticalAlignment="Bottom"></TextBlock>
                     </StackPanel>
                 </StackPanel>
 
@@ -124,4 +124,23 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>
+
+    <Page.TopAppBar>
+        <AppBar x:Name="topAppBar"  Background="#ffd77c29" Height="110" BorderBrush="#ffd77c29">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <StackPanel  Orientation="Horizontal" Tapped="UseSinaWeibo_Tapped" >
+                    <Image Margin="10,-5,0,0" Source="/Images/Logo/sinaweibo_logo_red.png" Width="45" />
+                    <TextBlock  FontFamily="Microsoft YaHei" Text="使用新浪数据" FontSize="40" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal" Tapped="UseRenren_Tapped" >
+                    <Image  Margin="40,-5,0,0" Source="/Images/Logo/renren_logo.png" Width="45" />
+                    <TextBlock  FontFamily="Microsoft YaHei"   Text="使用人人数据"  FontSize="40" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal" Tapped="UseDouban_Tapped" >
+                    <Image  Margin="40,-5,0,0" Source="/Images/Logo/douban_logo.png" Width="45" />
+                    <TextBlock   FontFamily="Microsoft YaHei"  Text="使用豆瓣数据"  FontSize="40" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </AppBar>
+    </Page.TopAppBar>
 </common:LayoutAwarePage>
