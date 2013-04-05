@@ -1,0 +1,28 @@
+﻿<UserControl
+    x:Class="CareWin8.MyControl.RssSetPathControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CareWin8.MyControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="230"
+    d:DesignWidth="500">
+    
+    
+    <Border Padding="20,20,20,10"  Width="500" Height="230" Background="White">
+        <StackPanel>
+            <TextBlock  FontFamily="Microsoft YaHei" Text="指定地址:" FontSize="25" Foreground="#FF0F80F1"></TextBlock>
+            <TextBox  FontFamily="Microsoft YaHei" x:Name="txtBox" Text="http://"  BorderBrush="#FF0F80F1" />
+            <TextBlock FontFamily="Microsoft YaHei"  Margin="0,5,0,0"  Text="提示：此处应填用完整的rss地址，而不是站点地址" FontSize="18" Foreground="Gray"></TextBlock>
+            <TextBlock  FontFamily="Microsoft YaHei" Text="例如，应填入http://www.xxx.com/feed(或者/rss及其它)" FontSize="18" Foreground="Gray"></TextBlock>
+            <TextBlock  FontFamily="Microsoft YaHei" Text="而不是直接填入http://www.xxx.com" FontSize="18" Foreground="Gray"></TextBlock>
+            <StackPanel Margin="0,10,0,0"  Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button FontFamily="Microsoft YaHei"  FontSize="20" Content="确定" Foreground="White" BorderBrush="#FF0F80F1" Background="#FF0F80F1" HorizontalAlignment="Center" Click="Confirm_Click" ></Button>
+                <Button  FontFamily="Microsoft YaHei" FontSize="20" Content="取消" Foreground="White" BorderBrush="#FF0F80F1" Background="#FF0F80F1" HorizontalAlignment="Center" Click="Cancel_Click"></Button>
+            </StackPanel>
+            
+        </StackPanel>
+    </Border>
+    
+</UserControl>

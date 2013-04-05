@@ -454,6 +454,9 @@
     <Reference Include="NotificationsExtensions">
       <HintPath>Dll\NotificationsExtensions.winmd</HintPath>
     </Reference>
+    <Reference Include="UmengWinStoreLibrary">
+      <HintPath>Dll\UmengWinStoreLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Visifire for Windows 8, Version=2.0.1.0">

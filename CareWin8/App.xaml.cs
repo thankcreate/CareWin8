@@ -115,7 +115,7 @@ namespace CareWin8
             RenrenSDK.RenrenSDKData.AppKey = "19a4cb151cb7400bba75504317f65b4f";
             RenrenSDK.RenrenSDKData.AppSecret = "df339e16fd074d349b58294b19d175bf";
             RenrenSDK.RenrenSDKData.RedirectUri = "http://graph.renren.com/oauth/login_success.html";
-            List<String> listScope = new List<String>{ 
+            List<String> listScope = new List<String>{
                 "publish_feed",
                 "publish_blog", 
                 "publish_share",
@@ -187,8 +187,21 @@ namespace CareWin8
                     throw new Exception("Failed to create initial page");
                 }
             }
+
+            
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
+
+            // Umeng API一定要在Unlauched的结尾最后一句调用
+            initUmeng();
+        }
+
+        void initUmeng()
+        { 
+#if DEBUG
+            UmengSDK.UmengAnalytics.setDebug(true);
+#endif            
+            UmengSDK.UmengAnalytics.onLaunching("515e9a8856240b1ec903a67a", "Default");
         }
 
         /// <summary>

@@ -137,12 +137,15 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="183"/>
                             <RowDefinition Height="183"/>
+                            <RowDefinition Height="183"/>
                         </Grid.RowDefinitions>
                         <Image Grid.Row="0" Grid.Column="0" Margin="5,5,5,5"  Source="/Images/Lab/BarChart.png" Tapped="TimeSpan_Tapped" />
                         <Image Grid.Row="0" Grid.Column="1" Margin="5,5,5,5"  Source="/Images/Lab/Girl.png" Tapped="CharactorAnalysis_Tapped"/>
                         <Image Grid.Row="0" Grid.Column="2" Margin="5,5,5,5"  Source="/Images/Lab/Alarm.png" Tapped="LovePercentage_Tapped"/>
                         <Image Grid.Row="1" Grid.Column="0" Margin="5,5,5,5"  Source="/Images/Lab/ManFace.png" Tapped="PotentialEnemy_Tapped"/>
                         <Image Grid.Row="1" Grid.Column="1" Margin="5,5,5,5"  Source="/Images/Lab/Cat.png" Tapped="Cat_Tapped" />
+                        <Image Grid.Row="1" Grid.Column="2" Margin="5,5,5,5"  Source="/Images/Lab/Chat.png" Tapped="Chat_Tapped" />
+                        <Image Grid.Row="2" Grid.Column="0" Margin="5,5,5,5"  Source="/Images/Lab/Heart.png" Tapped="Bless_Tapped" />
                     </Grid>
                 </StackPanel>
             </StackPanel>

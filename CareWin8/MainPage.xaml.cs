@@ -326,6 +326,16 @@ namespace CareWin8
             //Frame.Navigate(typeof(GuideView));
         }
 
+        private void Chat_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(CatView));            
+        }
+
+        private void Bless_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(CatView));            
+        }
+
         private void MenuImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             topAppBar.IsOpen = true;
