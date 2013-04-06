@@ -57,11 +57,14 @@ namespace CareWin8
                     IRandomAccessStream writeStream = await file.OpenAsync(FileAccessMode.ReadWrite);
                     Stream outStream = Task.Run(() => writeStream.AsStreamForWrite()).Result;
                     serializer.Serialize(outStream, Obj);
+                    outStream.Flush();
+                    writeStream.Dispose();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                int a = 1;
+                a++;
             }
         }
         public async Task<T> LoadASync(string FileName)
@@ -73,7 +76,7 @@ namespace CareWin8
                 StorageFolder folder = GetFolder(storageType);
                 file = await folder.GetFileAsync(FileName);
                 IRandomAccessStream readStream = await file.OpenAsync(FileAccessMode.Read);
-                Stream inStream = Task.Run(() => readStream.AsStreamForRead()).Result;
+                Stream inStream = Task.Run(() => readStream.AsStreamForRead()).Result;                                
                 return (T)serializer.Deserialize(inStream);
             }
             catch (FileNotFoundException)
@@ -82,7 +85,7 @@ namespace CareWin8
                 return default(T);
                 //throw;
             }
-            catch (Exception)
+            catch (Exception ex)
                  {
                      return default(T);
             }

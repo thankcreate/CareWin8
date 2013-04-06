@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="12392ThankCreate.1922282FD512C" Publisher="CN=1EE03617-47FC-4AA3-97AE-D32CB7ECB900" Version="1.1.1.0" />
+  <Identity Name="12392ThankCreate.1922282FD512C" Publisher="CN=1EE03617-47FC-4AA3-97AE-D32CB7ECB900" Version="1.2.0.0" />
   <Properties>
     <DisplayName>我只在乎你</DisplayName>
     <PublisherDisplayName>ThankCreate</PublisherDisplayName>

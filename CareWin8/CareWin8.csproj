@@ -169,6 +169,8 @@
     <Compile Include="Tool\Misc\StorageHelper.cs" />
     <Compile Include="Tool\Misc\TaskHelper.cs" />
     <Compile Include="Tool\UI\TileUpdateHelper.cs" />
+    <Compile Include="ViewModels\BlessItem.cs" />
+    <Compile Include="ViewModels\ChatItemViewModel.cs" />
     <Compile Include="ViewModels\Collection\FriendViewModelCollection.cs" />
     <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\FriendViewModel.cs" />
@@ -188,6 +190,10 @@
     <Compile Include="Views\GuideView.xaml.cs">
       <DependentUpon>GuideView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Lab\BlessTemplateSelector.cs" />
+    <Compile Include="Views\Lab\BlessView.xaml.cs">
+      <DependentUpon>BlessView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Lab\CatView.xaml.cs">
       <DependentUpon>CatView.xaml</DependentUpon>
     </Compile>
@@ -196,6 +202,10 @@
     </Compile>
     <Compile Include="Views\Lab\CharactorAnalysisView.xaml.cs">
       <DependentUpon>CharactorAnalysisView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Lab\ChatTemplateSelector.cs" />
+    <Compile Include="Views\Lab\ChatView.xaml.cs">
+      <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Lab\LovePercentageControl.xaml.cs">
       <DependentUpon>LovePercentageControl.xaml</DependentUpon>
@@ -271,7 +281,9 @@
     <Content Include="Images\Lab\Alarm.png" />
     <Content Include="Images\Lab\BarChart.png" />
     <Content Include="Images\Lab\Cat.png" />
+    <Content Include="Images\Lab\Chat.png" />
     <Content Include="Images\Lab\Girl.png" />
+    <Content Include="Images\Lab\Heart.png" />
     <Content Include="Images\Lab\ManFace.png" />
     <Content Include="Images\Logo\douban_logo.png" />
     <Content Include="Images\Logo\renren_logo.png" />
@@ -282,10 +294,12 @@
     <Content Include="Images\Thumb\Arrow.png" />
     <Content Include="Images\Thumb\DefaultAvatar.png" />
     <Content Include="Images\Thumb\Find.png" />
+    <Content Include="Images\Thumb\Garbage.png" />
     <Content Include="Images\Thumb\Go.png" />
     <Content Include="Images\Thumb\Heart_transparent.png" />
     <Content Include="Images\Thumb\IE.png" />
     <Content Include="Images\Thumb\Menu.PNG" />
+    <Content Include="Images\Thumb\Pen.png" />
     <Content Include="Images\Thumb\Picture.png" />
     <Content Include="Images\Thumb\Refresh.png" />
     <Content Include="Images\Thumb\Refresh_skyblue.png" />
@@ -367,6 +381,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Lab\BlessView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Lab\CatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -376,6 +394,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Lab\CharactorAnalysisView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Lab\ChatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -451,6 +473,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Coding4Fun.Toolkit.Controls">
+      <HintPath>Dll\Coding4Fun.Toolkit.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="NotificationsExtensions">
       <HintPath>Dll\NotificationsExtensions.winmd</HintPath>
     </Reference>

@@ -328,12 +328,12 @@ namespace CareWin8
 
         private void Chat_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Frame.Navigate(typeof(CatView));            
+            Frame.Navigate(typeof(ChatView));            
         }
 
         private void Bless_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Frame.Navigate(typeof(CatView));            
+            Frame.Navigate(typeof(BlessView));            
         }
 
         private void MenuImage_Tapped(object sender, TappedRoutedEventArgs e)

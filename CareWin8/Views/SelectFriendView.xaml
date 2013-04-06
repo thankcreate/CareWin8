@@ -20,8 +20,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-      
             
         <GridView Grid.RowSpan="3"  IncrementalLoadingTrigger="Edge"  IncrementalLoadingThreshold="0"  Padding="100,190,0,50"   x:Name="FriendsGridView" ItemsSource="{Binding FriendListInShow}" 
                     SelectionMode="Single" SelectionChanged="FriendsGridView_SelectionChanged">

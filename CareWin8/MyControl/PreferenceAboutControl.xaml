@@ -24,7 +24,7 @@
             <StackPanel Margin="20,10,0,0" >
                 <Image Source ="/Assets/310x150.png" Width="200" HorizontalAlignment="Left"></Image>
                 <TextBlock  FontFamily="Microsoft YaHei" Text="我只在乎你" FontSize="20" Foreground="SkyBlue" Margin="0,10,0,0"/>
-                <TextBlock  FontFamily="Microsoft YaHei" Text="V1.1.1.0" FontSize="20" Foreground="SkyBlue" />
+                <TextBlock  FontFamily="Microsoft YaHei" Text="V1.2.0.0" FontSize="20" Foreground="SkyBlue" />
                 <TextBlock  FontFamily="Microsoft YaHei" Text="ThankCreate Studio" FontSize="20" Foreground="SkyBlue" />
                 <StackPanel Margin="0,30,0,0" Orientation="Horizontal" Tapped="GotoSite_Tapped" >
                     <Image Source="/Images/Bar/IE.png"  Width="30" />
